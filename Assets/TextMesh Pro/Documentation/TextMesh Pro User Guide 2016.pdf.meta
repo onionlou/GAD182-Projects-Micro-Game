@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/TextMesh Pro/Documentation/TextMesh Pro User Guide 2016.pdf.meta
 guid: 1b8d251f9af63b746bf2f7ffe00ebb9b
+========
+guid: be0f4be0febcc3a4c8f51e64720382e5
+>>>>>>>> lucas:Assets/Scenes/2 Cannon Fodder.unity.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
