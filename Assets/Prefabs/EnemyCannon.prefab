@@ -230,6 +230,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 46e3658bb4eb4a5429b142bb158dec42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  fireballPrefab: {fileID: 838480289006596926, guid: 39528fa8ec406a74e8772957a7c78dfd, type: 3}
-  shootInterval: 1.5
+  fireballPrefab: {fileID: 7756479833348692514, guid: d9f89594eb667f64ca85b13a4fc57984, type: 3}
   firePoint: {fileID: 4476877696932928108}
+  shootInterval: 1.5

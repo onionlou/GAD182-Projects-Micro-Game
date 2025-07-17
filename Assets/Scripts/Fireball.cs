@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +9,7 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
+    [SerializeField] private Transform visualChild; // Drag your sprite child here in Inspector
 
     private Vector2 direction;
     private bool hasDirection = false;
@@ -19,13 +20,14 @@ public class Fireball : MonoBehaviour
         transform.Translate(direction * speed * Time.deltaTime);
     }
 
-    /// <summary>
-    /// Set the direction the fireball should move in.
-    /// </summary>
     public void SetDirection(Vector2 newDirection)
     {
         direction = newDirection.normalized;
         hasDirection = true;
+
+        // 🔄 Rotate the visual child from default facing (down) to match direction
+        float angle = Vector2.SignedAngle(Vector2.down, direction);
+        visualChild.rotation = Quaternion.Euler(0f, 0f, angle);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
