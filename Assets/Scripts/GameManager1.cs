@@ -53,6 +53,7 @@ public class GameManager1 : MonoBehaviour
         if (hitTag == "Player")
         {
             Debug.Log("You Lose!");
+            Debug.Log("Load 'Try Again' scene.");
             gameEnded = true;
         }
         else if (hitTag == "Goblin")
@@ -64,10 +65,14 @@ public class GameManager1 : MonoBehaviour
     private void Win()
     {
         Debug.Log("You Win!");
+        Debug.Log("Load 'Next level' menu");
         gameEnded = true;
-        Invoke(nameof(NextLevel), 2f);
+        Invoke(nameof(NextLevel), 2f); 
     }
 
+    /// <summary>
+    /// //Load scene for "2 Cannon Fodder"
+    /// </summary>
     private void NextLevel()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
