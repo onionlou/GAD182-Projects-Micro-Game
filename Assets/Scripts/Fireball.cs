@@ -10,10 +10,24 @@ public class Fireball : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
     [SerializeField] private Transform visualChild; // Drag your sprite child here in Inspector
+    
+    [Header("Audio Clips")]
+    private AudioSource audioSource;
+    public AudioClip launchSound;
+    public AudioClip hitSound;
 
     private Vector2 direction;
     private bool hasDirection = false;
 
+    private void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+
+        if (audioSource != null && launchSound != null)
+        {
+            audioSource.PlayOneShot(launchSound);
+        }
+    }
     private void Update()
     {
         if (!hasDirection) return;
@@ -32,8 +46,12 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Goblin"))
+        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
         {
+            if (audioSource != null && hitSound != null)
+            {
+                AudioSource.PlayClipAtPoint(hitSound, transform.position);
+            }
             GameManager1.Instance.GameOverOrWin(other.tag);
             Destroy(gameObject);
         }
