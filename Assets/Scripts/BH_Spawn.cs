@@ -17,7 +17,7 @@ public class BH_Spawn : MonoBehaviour
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
             Spawner();
 
