@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: b955b0ab90afc7249bbffe311ad4a3c2
+guid: a41ecf0831067b1469680f7774d1f6e8
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: SS_Wizard_256x256_0
+      name: S_Frog 256x256_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 512
-        width: 256
-        height: 256
+        y: 192
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,20 +124,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e311aaf591c7a2c449bb215a159b3c9b
-      internalID: 880571434
+      spriteID: 639bcd2ec16449d4fb08dd4f53a48f6c
+      internalID: 703066484
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SS_Wizard_256x256_1
+      name: S_Frog 256x256_1
       rect:
         serializedVersion: 2
-        x: 256
-        y: 512
-        width: 256
-        height: 256
+        x: 192
+        y: 192
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -145,20 +145,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 288eb19ecb9227c49b4cda619eabe404
-      internalID: 96624130
+      spriteID: 8699097e5c976db4f8f877184b7fff95
+      internalID: -1102822566
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SS_Wizard_256x256_2
+      name: S_Frog 256x256_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 256
-        width: 256
-        height: 256
+        x: 384
+        y: 192
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -166,20 +166,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2def2085c604d14d86b739f37eaaaf1
-      internalID: -1809258943
+      spriteID: f133e3dee1f080948a49931fadffadf2
+      internalID: 161558487
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SS_Wizard_256x256_3
+      name: S_Frog 256x256_3
       rect:
         serializedVersion: 2
-        x: 256
-        y: 256
-        width: 256
-        height: 256
+        x: 576
+        y: 192
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -187,20 +187,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e7841fcb7f01ea446b723d620a281d8d
-      internalID: -1633714353
+      spriteID: de3d245edbc59fe4d8fe1ff9ba64657f
+      internalID: -791704002
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SS_Wizard_256x256_4
+      name: S_Frog 256x256_4
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 256
-        height: 256
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -208,20 +208,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 3b764483de6d7d842bfc509185604f8c
-      internalID: 48282840
+      spriteID: a972dcb4a79b4fd4ba86848f2d7b4211
+      internalID: -162744939
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: SS_Wizard_256x256_5
+      name: S_Frog 256x256_5
       rect:
         serializedVersion: 2
-        x: 256
+        x: 192
         y: 0
-        width: 256
-        height: 256
+        width: 192
+        height: 192
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -229,8 +229,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 79b807e992668914abc6b9e8035aaf33
-      internalID: -1763209456
+      spriteID: dd6dc7d624d378744bef178e8a338df6
+      internalID: 2058991655
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: S_Frog 256x256_6
+      rect:
+        serializedVersion: 2
+        x: 384
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5f2470129cdfb3a4da3d8ddaa05133d9
+      internalID: -110539909
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: S_Frog 256x256_7
+      rect:
+        serializedVersion: 2
+        x: 576
+        y: 0
+        width: 192
+        height: 192
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e4aa4965ff4157642b9fc15f142095fa
+      internalID: -1089379750
       vertices: []
       indices: 
       edges: []
@@ -246,12 +288,14 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      SS_Wizard_256x256_0: 880571434
-      SS_Wizard_256x256_1: 96624130
-      SS_Wizard_256x256_2: -1809258943
-      SS_Wizard_256x256_3: -1633714353
-      SS_Wizard_256x256_4: 48282840
-      SS_Wizard_256x256_5: -1763209456
+      S_Frog 256x256_0: 703066484
+      S_Frog 256x256_1: -1102822566
+      S_Frog 256x256_2: 161558487
+      S_Frog 256x256_3: -791704002
+      S_Frog 256x256_4: -162744939
+      S_Frog 256x256_5: 2058991655
+      S_Frog 256x256_6: -110539909
+      S_Frog 256x256_7: -1089379750
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
