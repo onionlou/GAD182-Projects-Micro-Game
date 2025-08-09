@@ -39,7 +39,6 @@ public class Fireball : MonoBehaviour
         direction = newDirection.normalized;
         hasDirection = true;
 
-        // 🔄 Rotate the visual child from default facing (down) to match direction
         float angle = Vector2.SignedAngle(Vector2.down, direction);
         visualChild.rotation = Quaternion.Euler(0f, 0f, angle);
     }
@@ -52,7 +51,7 @@ public class Fireball : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(hitSound, transform.position);
             }
-            GameManager1.Instance.GameOverOrWin(other.tag);
+            GameManager1LO.Instance.GameOverOrWin(other.tag);
             Destroy(gameObject);
         }
         else if (other.CompareTag("Wall"))

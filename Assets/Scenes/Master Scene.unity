@@ -290,8 +290,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   uiScenes:
+  - Title Menu
   - UI
   gameScenes:
+  - 1 Dodge (Fire)ball
+  - 2 Cannon Fodder
   - 5 BulletHell Game
 --- !u!4 &1585992313
 Transform:
