@@ -9,11 +9,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Master Scene.unity
     guid: 25d3a5e3b7ae2404ab2474be48868706
   - enabled: 1
-    path: Assets/Scenes/UI.unity
-    guid: 9efaa008f8ee89b4788adb18bb95a6ec
-  - enabled: 1
-    path: Assets/Scenes/5 BulletHell Game.unity
-    guid: d022b48a27ef9c74cae1f9682ba66319
+    path: Assets/Scenes/Main Menu.unity
+    guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/1 Dodge (Fire)ball.unity
     guid: fd03e59bafa143d418e44a1840cdb84d
@@ -21,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/2 Cannon Fodder.unity
     guid: be0f4be0febcc3a4c8f51e64720382e5
   - enabled: 1
-    path: Assets/Scenes/0 TitleMenu.unity
-    guid: 8c9cfa26abfee488c85f1582747f6a02
+    path: Assets/Scenes/5 BulletHell Game.unity
+    guid: d022b48a27ef9c74cae1f9682ba66319
+  - enabled: 0
+    path: Assets/Scenes/UI.unity
+    guid: 9efaa008f8ee89b4788adb18bb95a6ec
   m_configObjects: {}

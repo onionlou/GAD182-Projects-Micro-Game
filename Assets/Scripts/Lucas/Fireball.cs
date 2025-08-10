@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 /// <summary>
@@ -9,8 +7,8 @@ using UnityEngine;
 public class Fireball : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
-    [SerializeField] private Transform visualChild; // Drag your sprite child here in Inspector
-    
+    [SerializeField] private Transform visualChild;
+
     [Header("Audio Clips")]
     private AudioSource audioSource;
     public AudioClip launchSound;
@@ -18,6 +16,8 @@ public class Fireball : MonoBehaviour
 
     private Vector2 direction;
     private bool hasDirection = false;
+
+    private IWinCondition winCondition;
 
     private void Start()
     {
@@ -27,7 +27,11 @@ public class Fireball : MonoBehaviour
         {
             audioSource.PlayOneShot(launchSound);
         }
+
+        // Find the win condition in the scene
+        winCondition = FindObjectOfType<MonoBehaviour>() as IWinCondition;
     }
+
     private void Update()
     {
         if (!hasDirection) return;
@@ -51,7 +55,17 @@ public class Fireball : MonoBehaviour
             {
                 AudioSource.PlayClipAtPoint(hitSound, transform.position);
             }
-            GameManager1LO.Instance.GameOverOrWin(other.tag);
+
+            // Register the hit with the win condition
+            if (winCondition is DodgeWinCondition dodgeWin)
+            {
+                dodgeWin.RegisterHit(other.tag);
+            }
+            else if (winCondition is CannonFodderWinCondition cannonWin)
+            {
+                cannonWin.RegisterHit(other.tag);
+            }
+
             Destroy(gameObject);
         }
         else if (other.CompareTag("Wall"))
