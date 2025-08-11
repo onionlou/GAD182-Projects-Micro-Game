@@ -1,5 +1,7 @@
 public interface IWinCondition
 {
     bool CheckWinCondition();
-    bool CheckLossCondition();
+    bool CheckLoseCondition();
+    event System.Action OnWin;
+    event System.Action OnLose;
 }

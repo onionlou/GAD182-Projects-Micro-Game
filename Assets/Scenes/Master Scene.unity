@@ -324,7 +324,7 @@ GameObject:
   - component: {fileID: 1585992318}
   - component: {fileID: 1585992319}
   m_Layer: 0
-  m_Name: Game Loader
+  m_Name: GameManager(Master)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -404,13 +404,13 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.4
+  m_Volume: 0.35
   m_Pitch: 1
   Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
-  Priority: 128
+  Priority: 162
   DopplerLevel: 1
   MinDistance: 1
   MaxDistance: 500

@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -40,6 +41,43 @@ public class GameManager : MonoBehaviour
         {
             Debug.Log("Active scene: " + SceneManager.GetSceneAt(i).name);
         }
+        // Subscribe to all win/lose conditions in the current scene
+        SubscribeToWinConditions();
+    }
+
+    private void SubscribeToWinConditions()
+    {
+        var winConditions = FindObjectsOfType<MonoBehaviour>().OfType<IWinCondition>().ToList();
+
+        if (winConditions.Count == 0)
+        {
+            Debug.LogWarning("GameManager: No win conditions found in scene.");
+            return;
+        }
+
+        foreach (var condition in winConditions)
+        {
+            Debug.Log($"GameManager: Subscribing to win condition on {condition}");
+            condition.OnWin += HandleWin;
+            condition.OnLose += HandleLose;
+        }
+    }
+
+    private void HandleWin()
+    {
+        Debug.Log("?? GameManager: HandleWin() triggered!");
+        AudioManager.instance.PlayMainMenuMusic();
+
+        // Load the next scene instead of returning to main menu
+        SceneSwapper.instance.LoadNextScene();
+    }
+
+
+    private void HandleLose()
+    {
+        Debug.Log("GameManager: HandleLose() triggered!");
+        AudioManager.instance.PlayMainMenuMusic();
+        SceneSwapper.instance.LoadUnloadScene("Main Menu"); 
     }
 
     public void StartGame()
@@ -64,6 +102,7 @@ public class GameManager : MonoBehaviour
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
     }
 }
+
 
 /* PREVIOUS SCRIPT VERSION
 //To ensure that there's no conflicts on loading, we tell the SceneSwapper to load our scenes from Start here, to prevent script load execution errors

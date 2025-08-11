@@ -6,6 +6,8 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
     private float timer;
     private bool goblinHit = false;
     private bool timeExpired = false;
+    public event System.Action OnWin;
+    public event System.Action OnLose;
 
     private void Start()
     {
@@ -16,8 +18,12 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
     {
         if (timeExpired || goblinHit) return;
 
-        timer -= Time.deltaTime;
-        if (timer <= 0f) timeExpired = true;
+        if (timer <= 0f)
+        {
+            timeExpired = true;
+            if (CheckLoseCondition()) OnLose?.Invoke();
+        }
+
     }
 
     // Called when a projectile hits something
@@ -26,6 +32,7 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
         if (hitTag == "Enemy")
         {
             goblinHit = true;
+            if (CheckWinCondition()) OnLose?.Invoke();
         }
     }
 
@@ -34,7 +41,7 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
         return goblinHit;
     }
 
-    public bool CheckLossCondition()
+    public bool CheckLoseCondition()
     {
         return timeExpired && !goblinHit;
     }

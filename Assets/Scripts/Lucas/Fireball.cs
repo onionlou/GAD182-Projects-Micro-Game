@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class Fireball : MonoBehaviour
@@ -24,11 +25,13 @@ public class Fireball : MonoBehaviour
         }
 
         // Find the active win condition
-        winCondition = FindObjectOfType<MonoBehaviour>() as IWinCondition;
+        winCondition = FindObjectsOfType<MonoBehaviour>().OfType<IWinCondition>().FirstOrDefault();
+
         if (winCondition == null)
         {
             Debug.LogWarning("No IWinCondition found in the scene — hits won't affect win/loss state.");
         }
+
     }
 
     private void Update()

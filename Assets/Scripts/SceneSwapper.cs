@@ -92,7 +92,6 @@ public class SceneSwapper : MonoBehaviour
         }
     }
 
-
     public void LoadScene(int positionInList)
     {
         if (gameScenes == null || gameScenes.Length == 0) return;
@@ -169,6 +168,13 @@ public class SceneSwapper : MonoBehaviour
         {
             currentOperation = SceneManager.LoadSceneAsync(wrapper.scene, LoadSceneMode.Additive);
             yield return new WaitUntil(() => SceneManager.GetSceneByName(wrapper.scene).isLoaded);
+
+            Scene loadedScene = SceneManager.GetSceneByName(wrapper.scene);
+            if (loadedScene.IsValid())
+            {
+                SceneManager.SetActiveScene(loadedScene);
+                Debug.Log($"SceneSwapper: Activated scene '{wrapper.scene}'");
+            }
 
             loadedScenes.Add(wrapper.scene);
         }
