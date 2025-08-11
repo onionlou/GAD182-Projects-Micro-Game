@@ -242,6 +242,8 @@ MonoBehaviour:
   BattleText: {fileID: 1542757967}
   HPText: {fileID: 1581581088}
   GoblinText: {fileID: 812101230}
+  S_Goblin_256x256: {fileID: 1500643350}
+  decisionTime: 0
 --- !u!1 &331922475
 GameObject:
   m_ObjectHideFlags: 0
