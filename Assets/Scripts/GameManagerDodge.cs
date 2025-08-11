@@ -30,11 +30,11 @@ public class GameManagerDodge : MonoBehaviour
 
     private void EvaluateOutcome()
     {
-        if (winCondition.CheckWin())
+        if (winCondition.CheckWinCondition())
         {
             Win();
         }
-        else if (winCondition.CheckLoss())
+        else if (winCondition.CheckLossCondition())
         {
             Lose(); 
         }

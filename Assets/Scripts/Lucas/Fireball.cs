@@ -1,9 +1,5 @@
 using UnityEngine;
 
-/// <summary>
-/// Controls movement and collision of the fireball projectile.
-/// Direction is set externally via SetDirection().
-/// </summary>
 public class Fireball : MonoBehaviour
 {
     [SerializeField] private float speed = 5f;
@@ -16,7 +12,6 @@ public class Fireball : MonoBehaviour
 
     private Vector2 direction;
     private bool hasDirection = false;
-
     private IWinCondition winCondition;
 
     private void Start()
@@ -28,8 +23,12 @@ public class Fireball : MonoBehaviour
             audioSource.PlayOneShot(launchSound);
         }
 
-        // Find the win condition in the scene
+        // Find the active win condition
         winCondition = FindObjectOfType<MonoBehaviour>() as IWinCondition;
+        if (winCondition == null)
+        {
+            Debug.LogWarning("No IWinCondition found in the scene — hits won't affect win/loss state.");
+        }
     }
 
     private void Update()
@@ -43,32 +42,34 @@ public class Fireball : MonoBehaviour
         direction = newDirection.normalized;
         hasDirection = true;
 
-        float angle = Vector2.SignedAngle(Vector2.down, direction);
-        visualChild.rotation = Quaternion.Euler(0f, 0f, angle);
+        // Rotate visual to match movement direction
+        if (visualChild != null)
+        {
+            float angle = Vector2.SignedAngle(Vector2.down, direction);
+            visualChild.rotation = Quaternion.Euler(0f, 0f, angle);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player") || other.CompareTag("Enemy"))
+        if (audioSource != null && hitSound != null &&
+            (other.CompareTag("Player") || other.CompareTag("Enemy")))
         {
-            if (audioSource != null && hitSound != null)
-            {
-                AudioSource.PlayClipAtPoint(hitSound, transform.position);
-            }
-
-            // Register the hit with the win condition
-            if (winCondition is DodgeWinCondition dodgeWin)
-            {
-                dodgeWin.RegisterHit(other.tag);
-            }
-            else if (winCondition is CannonFodderWinCondition cannonWin)
-            {
-                cannonWin.RegisterHit(other.tag);
-            }
-
-            Destroy(gameObject);
+            AudioSource.PlayClipAtPoint(hitSound, transform.position);
         }
-        else if (other.CompareTag("Wall"))
+
+        // Register hit with win condition if relevant
+        if (winCondition != null && other.CompareTag("Player"))
+        {
+            // Instead of knowing exact win condition type, we call a standard method
+            if (winCondition is IProjectileReactive projectileReactive)
+            {
+                projectileReactive.OnProjectileHit(other.tag);
+            }
+        }
+
+        // Destroy projectile on impact
+        if (other.CompareTag("Player") || other.CompareTag("Enemy") || other.CompareTag("Wall"))
         {
             Destroy(gameObject);
         }

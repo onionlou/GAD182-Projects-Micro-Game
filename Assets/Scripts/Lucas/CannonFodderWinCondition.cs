@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CannonFodderWinCondition : MonoBehaviour, IWinCondition
+public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
 {
     [SerializeField] private float timeLimit = 15f;
     private float timer;
@@ -17,14 +17,11 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition
         if (timeExpired || goblinHit) return;
 
         timer -= Time.deltaTime;
-
-        if (timer <= 0f)
-        {
-            timeExpired = true;
-        }
+        if (timer <= 0f) timeExpired = true;
     }
 
-    public void RegisterHit(string hitTag)
+    // Called when a projectile hits something
+    public void OnProjectileHit(string hitTag)
     {
         if (hitTag == "Enemy")
         {
@@ -32,12 +29,12 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition
         }
     }
 
-    public bool CheckWin()
+    public bool CheckWinCondition()
     {
         return goblinHit;
     }
 
-    public bool CheckLoss()
+    public bool CheckLossCondition()
     {
         return timeExpired && !goblinHit;
     }

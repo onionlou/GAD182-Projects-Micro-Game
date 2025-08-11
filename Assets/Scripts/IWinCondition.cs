@@ -1,5 +1,5 @@
 public interface IWinCondition
 {
-    bool CheckWin();
-    bool CheckLoss();
+    bool CheckWinCondition();
+    bool CheckLossCondition();
 }

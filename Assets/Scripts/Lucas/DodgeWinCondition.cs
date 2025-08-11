@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DodgeWinCondition : MonoBehaviour, IWinCondition
+public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
 {
     [SerializeField] private float timeLimit = 15f;
     private float timer;
@@ -17,14 +17,11 @@ public class DodgeWinCondition : MonoBehaviour, IWinCondition
         if (timeExpired || playerHit) return;
 
         timer -= Time.deltaTime;
-
-        if (timer <= 0f)
-        {
-            timeExpired = true;
-        }
+        if (timer <= 0f) timeExpired = true;
     }
 
-    public void RegisterHit(string hitTag)
+    // Called by projectile when it hits something
+    public void OnProjectileHit(string hitTag)
     {
         if (hitTag == "Player")
         {
@@ -32,12 +29,12 @@ public class DodgeWinCondition : MonoBehaviour, IWinCondition
         }
     }
 
-    public bool CheckWin()
+    public bool CheckWinCondition()
     {
         return timeExpired && !playerHit;
     }
 
-    public bool CheckLoss()
+    public bool CheckLossCondition()
     {
         return playerHit;
     }

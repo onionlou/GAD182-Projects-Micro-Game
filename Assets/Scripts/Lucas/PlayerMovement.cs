@@ -29,7 +29,6 @@ public class PlayerMovement : MonoBehaviour
         // Send values to animator
         animator.SetFloat("MoveX", movement.x);
         animator.SetFloat("MoveY", movement.y);
-        animator.SetBool("IsMoving", movement != Vector2.zero);
     }
 
     void FixedUpdate()
