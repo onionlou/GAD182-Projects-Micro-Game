@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -108,7 +108,133 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_0
+      rect:
+        serializedVersion: 2
+        x: 12
+        y: 508
+        width: 231
+        height: 260
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2c8b0b842c7cba74181bd43e051fb441
+      internalID: 1829881525
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_1
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 509
+        width: 234
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6f6a9a2b1aa0e1d4faef04d0f5978e08
+      internalID: -595762925
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_2
+      rect:
+        serializedVersion: 2
+        x: 11
+        y: 254
+        width: 220
+        height: 256
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13d2bdb7db77df347887c71d0e078cef
+      internalID: 2061823611
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_3
+      rect:
+        serializedVersion: 2
+        x: 263
+        y: 256
+        width: 224
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7526fdc950a5e9e40a7822e81ef3eb77
+      internalID: -91524641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_4
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 0
+        width: 225
+        height: 254
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 187176e6279a794418a8e2e30f46b0f3
+      internalID: 2136487994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: SS_Wizard_256x256_5
+      rect:
+        serializedVersion: 2
+        x: 245
+        y: 0
+        width: 243
+        height: 253
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 13caa948b10b63d48ab4412b20877523
+      internalID: -620468916
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -119,7 +245,13 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      SS_Wizard_256x256_0: 1829881525
+      SS_Wizard_256x256_1: -595762925
+      SS_Wizard_256x256_2: 2061823611
+      SS_Wizard_256x256_3: -91524641
+      SS_Wizard_256x256_4: 2136487994
+      SS_Wizard_256x256_5: -620468916
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
