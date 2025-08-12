@@ -3,9 +3,10 @@ using UnityEngine;
 public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
 {
     [SerializeField] private float timeLimit = 15f;
+
     private float timer;
     private bool goblinHit = false;
-    private bool timeExpired = false;
+
     public event System.Action OnWin;
     public event System.Action OnLose;
 
@@ -16,23 +17,27 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
 
     private void Update()
     {
-        if (timeExpired || goblinHit) return;
-
-        if (timer <= 0f)
+        // Decrease timer until time runs out or win condition is met
+        if (!goblinHit)
         {
-            timeExpired = true;
-            if (CheckLoseCondition()) OnLose?.Invoke();
+            timer -= Time.deltaTime;
+            if (timer <= 0f && CheckLoseCondition())
+            {
+                OnLose?.Invoke();
+            }
         }
-
     }
 
-    // Called when a projectile hits something
+    // Triggered when a projectile hits something
     public void OnProjectileHit(string hitTag)
     {
-        if (hitTag == "Enemy")
+        if (hitTag == "Enemy" && !goblinHit)
         {
             goblinHit = true;
-            if (CheckWinCondition()) OnLose?.Invoke();
+            if (CheckWinCondition())
+            {
+                OnWin?.Invoke();
+            }
         }
     }
 
@@ -43,6 +48,6 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
 
     public bool CheckLoseCondition()
     {
-        return timeExpired && !goblinHit;
+        return !goblinHit && timer <= 0f;
     }
 }

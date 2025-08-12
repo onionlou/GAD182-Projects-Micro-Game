@@ -1396,6 +1396,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Global Volume (Bloom)
       objectReference: {fileID: 0}
+    - target: {fileID: 665509702953388857, guid: f785e7fbc45c8844fa17eca21584d033, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5325683244874616030, guid: f785e7fbc45c8844fa17eca21584d033, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
