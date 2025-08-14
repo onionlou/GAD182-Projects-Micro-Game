@@ -21,7 +21,7 @@ public class RPGHandler : MonoBehaviour
         int randomIndex = Random.Range(0, Situation.Length);
         chosenSituation = Situation[randomIndex];
         Debug.Log("Situation: " + chosenSituation);
-        decisionTime = 3.0f;
+        decisionTime = 5.0f;
         Pressed = false;
         OutofTime = false;
         BattleText.text = "A goblin blocks your path. What do you do?\nLeft Arrow Key - Fight                         Right Arrow Key - Heal\n                             Down Arrow Key - Run";
@@ -67,12 +67,19 @@ public class RPGHandler : MonoBehaviour
                 BattleText.text = "You Attack the Goblin.";
                 StartCoroutine(FightCorrect());
             }
-            else
+            if(chosenSituation == "Heal")
             {
                 Debug.Log("WRONG");
                 Pressed = true;
-                BattleText.text = "The Goblin Attacks!";
-                StartCoroutine(FightWrong());
+                BattleText.text = "You Attack the Goblin.";
+                StartCoroutine(FightWrongH());
+            }
+            if(chosenSituation == "Run")
+            {
+                Debug.Log("WRONG");
+                Pressed = true;
+                BattleText.text = "You Attack the Goblin.";
+                StartCoroutine(FightWrongR());
             }
         }
         if(Input.GetKeyDown(KeyCode.RightArrow) && !Pressed && decisionTime >= 0.0f)
@@ -86,12 +93,23 @@ public class RPGHandler : MonoBehaviour
                 HPText.color = Color.white;
                 StartCoroutine(HealCorrect());
             }
-            else
+            if(chosenSituation == "Fight")
             {
                 Debug.Log("WRONG");
                 Pressed = true;
-                BattleText.text = "The Goblin Attacks!";
-                StartCoroutine(HealWrong());
+                BattleText.text = "You healed all your HP.";
+                HPText.text = "HP: 20";
+                HPText.color = Color.white;
+                StartCoroutine(HealWrongF());
+            }
+            if(chosenSituation == "Run")
+            {
+                Debug.Log("WRONG");
+                Pressed = true;
+                BattleText.text = "You healed all your HP.";
+                HPText.text = "HP: 20";
+                HPText.color = Color.white;
+                StartCoroutine(HealWrongR());
             }
         }
         if(Input.GetKeyDown(KeyCode.DownArrow) && !Pressed && decisionTime >= 0.0f)
@@ -100,14 +118,22 @@ public class RPGHandler : MonoBehaviour
             {
                 Debug.Log("CORRECT");
                 Pressed = true;
-                BattleText.text = "You ran away.";
+                BattleText.text = "You tried to run away.";
+                StartCoroutine(RunCorrect());
             }
-            else
+            if(chosenSituation == "Fight")
             {
                 Debug.Log("WRONG");
                 Pressed = true;
-                BattleText.text = "The Goblin Attacks!";
-                StartCoroutine(RunWrong());
+                BattleText.text = "You tried to run away.";
+                StartCoroutine(RunWrongF());
+            }
+            if(chosenSituation == "Heal")
+            {
+                Debug.Log("WRONG");
+                Pressed = true;
+                BattleText.text = "You tried to run away.";
+                StartCoroutine(RunWrongH());
             }
         }
     }
@@ -133,7 +159,7 @@ public class RPGHandler : MonoBehaviour
     }
 
 
-
+    //chose fight and was correct
     IEnumerator FightCorrect()
 	{
         yield return new WaitForSeconds(2f);
@@ -144,8 +170,26 @@ public class RPGHandler : MonoBehaviour
         BattleText.text = "You Won!!!";
     }
 
-    IEnumerator FightWrong()
+     //chose fight during heal
+    IEnumerator FightWrongH()
 	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "You Missed!";
+        yield return new WaitForSeconds(2f);
+        HPText.text = "HP: 0";
+        HPText.color = Color.red;
+        BattleText.text = "You lost all your HP due to poison.";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "Game Over.";
+    }
+
+    //chose fight during run
+    IEnumerator FightWrongR()
+	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Lost 3HP";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Attacks!";
         yield return new WaitForSeconds(2f);
         HPText.text = "HP: 0";
         HPText.color = Color.red;
@@ -154,6 +198,7 @@ public class RPGHandler : MonoBehaviour
         BattleText.text = "Game Over.";
     }
 
+    //chose heal and was correct
     IEnumerator HealCorrect()
 	{
         yield return new WaitForSeconds(2f);
@@ -164,8 +209,11 @@ public class RPGHandler : MonoBehaviour
         BattleText.text = "You Won!!!";
     }
 
-    IEnumerator HealWrong()
+    //chose heal during fight
+    IEnumerator HealWrongF()
 	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Uses It's Super Attack!!";
         yield return new WaitForSeconds(2f);
         HPText.text = "HP: 0";
         HPText.color = Color.red;
@@ -174,8 +222,11 @@ public class RPGHandler : MonoBehaviour
         BattleText.text = "Game Over.";
     }
 
-    IEnumerator RunWrong()
+    //chose heal during run
+    IEnumerator HealWrongR()
 	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Uses It's Super Attack!!";
         yield return new WaitForSeconds(2f);
         HPText.text = "HP: 0";
         HPText.color = Color.red;
@@ -183,6 +234,50 @@ public class RPGHandler : MonoBehaviour
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
+
+    //chose run and was correct
+    IEnumerator RunCorrect()
+	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "...";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "You Got Away Safely!";
+    }
+
+    //chose run during fight
+    IEnumerator RunWrongF()
+	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "...";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "You Failed.";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Attacks!";
+        yield return new WaitForSeconds(2f);
+        HPText.text = "HP: 0";
+        HPText.color = Color.red;
+        BattleText.text = "You lost all your HP.";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "Game Over.";
+    }
+
+    //chose run during heal
+    IEnumerator RunWrongH()
+	{
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "...";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "You Failed.";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "The Goblin Attacks!";
+        yield return new WaitForSeconds(2f);
+        HPText.text = "HP: 0";
+        HPText.color = Color.red;
+        BattleText.text = "You lost all your HP.";
+        yield return new WaitForSeconds(2f);
+        BattleText.text = "Game Over.";
+    }
+
 
     IEnumerator TimeUp()
 	{
