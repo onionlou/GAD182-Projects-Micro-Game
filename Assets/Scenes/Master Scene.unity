@@ -346,8 +346,9 @@ MonoBehaviour:
   gameScenes:
   - 1 Dodge (Fire)ball
   - 2 Cannon Fodder
-  - 5 BulletHell Game
   - 3 Quick Magic
+  - 4 RPG Select
+  - 5 BulletHell Game
 --- !u!4 &1585992313
 Transform:
   m_ObjectHideFlags: 0
