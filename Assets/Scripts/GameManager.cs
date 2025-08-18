@@ -1,15 +1,22 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
     public Canvas mainMenuCanvas;
 
+    [Header("UI Menus")]
+    public GameObject winMenuUI;   // Level Complete panel
+    public GameObject loseMenuUI;  // Lose panel
+    public GameObject finalWinMenuUI; // Optional: all levels complete
+
+    private bool gameEnded = false;
+
     void Awake()
     {
+        // Ensure only one EventSystem survives
         var systems = FindObjectsOfType<EventSystem>();
         if (systems.Length > 1)
         {
@@ -32,16 +39,18 @@ public class GameManager : MonoBehaviour
         // Load UI overlays if any
         SceneSwapper.instance.OnSceneLoadComplete += OnUIScenesLoaded;
         SceneSwapper.instance.LoadStartingUI();
+
+        ResetPanels();
     }
 
     private void OnUIScenesLoaded()
     {
+        ResetPanels();
         Debug.Log("UI scenes loaded.");
         for (int i = 0; i < SceneManager.sceneCount; i++)
         {
             Debug.Log("Active scene: " + SceneManager.GetSceneAt(i).name);
         }
-        // Subscribe to all win/lose conditions in the current scene
         SubscribeToWinConditions();
     }
 
@@ -57,7 +66,6 @@ public class GameManager : MonoBehaviour
 
         foreach (var condition in winConditions)
         {
-            Debug.Log($"GameManager: Subscribing to win condition on {condition}");
             condition.OnWin += HandleWin;
             condition.OnLose += HandleLose;
         }
@@ -65,23 +73,46 @@ public class GameManager : MonoBehaviour
 
     private void HandleWin()
     {
-        Debug.Log("?? GameManager: HandleWin() triggered!");
-        AudioManager.instance.PlayMainMenuMusic();
+        if (gameEnded) return;
+        gameEnded = true;
 
-        // Load the next scene instead of returning to main menu
-        SceneSwapper.instance.LoadNextScene();
+        Debug.Log("GameManager: HandleWin() triggered!");
+
+        // Show the standard win menu — but keep GameMusic playing
+        if (winMenuUI) winMenuUI.SetActive(true);
     }
-
 
     private void HandleLose()
     {
+        if (gameEnded) return;
+        gameEnded = true;
+
         Debug.Log("GameManager: HandleLose() triggered!");
-        AudioManager.instance.PlayMainMenuMusic();
-        SceneSwapper.instance.LoadUnloadScene("Main Menu"); 
+
+        // Show lose panel
+        if (loseMenuUI) loseMenuUI.SetActive(true);
     }
+
+    public void HandleFinalWin()
+    {
+        if (gameEnded) return;
+        gameEnded = true;
+
+        Debug.Log("GameManager: HandleFinalWin() triggered!");
+
+        if (finalWinMenuUI) finalWinMenuUI.SetActive(true);
+
+        // Now switch to menu music
+        AudioManager.instance.PlayMainMenuMusic();
+    }
+
+    // -----------------------------
+    // UI Buttons
+    // -----------------------------
 
     public void StartGame()
     {
+        ResetGameState();
         AudioManager.instance.PlayGameMusic();
         SceneSwapper.instance.StartGame();
     }
@@ -93,15 +124,44 @@ public class GameManager : MonoBehaviour
 
     public void NextScene()
     {
+        ResetGameState();
         SceneSwapper.instance.LoadNextScene();
+    }
+
+    public void RestartScene()
+    {
+        ResetGameState();
+        var currentScene = SceneManager.GetActiveScene().name;
+        SceneSwapper.instance.LoadUnloadScene(currentScene);
     }
 
     public void BackToMainMenu()
     {
+        ResetGameState();
         AudioManager.instance.PlayMainMenuMusic();
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
     }
+
+    // -----------------------------
+    // Helpers
+    // -----------------------------
+
+    private void ResetGameState()
+    {
+        gameEnded = false;
+        ResetPanels();
+    }
+
+    private void ResetPanels()
+    {
+        if (winMenuUI) winMenuUI.SetActive(false);
+        if (loseMenuUI) loseMenuUI.SetActive(false);
+        if (finalWinMenuUI) finalWinMenuUI.SetActive(false);
+    }
 }
+
+
+
 
 
 /* PREVIOUS SCRIPT VERSION

@@ -27,6 +27,7 @@ public class AudioManager : MonoBehaviour
 
     private void Start()
     {
+        // Start in main menu context
         PlayMainMenuMusic();
     }
 
@@ -42,7 +43,7 @@ public class AudioManager : MonoBehaviour
 
     private void PlayMusic(AudioClip clip)
     {
-        if (musicSource.clip == clip) return; // Already playing
+        if (musicSource.clip == clip && musicSource.isPlaying) return;
         musicSource.clip = clip;
         musicSource.loop = true;
         musicSource.Play();
@@ -50,6 +51,9 @@ public class AudioManager : MonoBehaviour
 
     public void PlaySFX(AudioClip clip)
     {
-        sfxSource.PlayOneShot(clip);
+        if (clip != null)
+        {
+            sfxSource.PlayOneShot(clip);
+        }
     }
 }
