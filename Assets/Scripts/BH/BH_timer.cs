@@ -16,7 +16,7 @@ public class BH_timer : MonoBehaviour
 
         //while (GameLength > 0)
         {
-            Debug.Log(GameLength);
+            //Debug.Log(GameLength);
 
         }
 

@@ -228,6 +228,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 324a097ab3d0fba469305736a5d8f87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FakeArgument: 1
   ItemsToSpawn:
   - {fileID: 2163983185269123802, guid: 8e79b618ad0a57f488908cfb0a88667f, type: 3}
 --- !u!4 &600420667

@@ -5,18 +5,18 @@ using UnityEngine;
 
 public class BH_Spawn : MonoBehaviour
 {
-    
-     
+    public bool FakeArgument = true;
+
+
     public List<GameObject> ItemsToSpawn = new List<GameObject>();
 
 
     // Start is called before the first frame update
-    void Start()
-    {
-       
-    }
+    
     private void Update()
     {
+        
+
         if (Input.GetKey(KeyCode.Space))
         {
             Spawner();
@@ -37,7 +37,20 @@ public class BH_Spawn : MonoBehaviour
     }
 
 
+    IEnumerator Start()
+    {
+        Debug.Log("IEnumerable Called");
 
+        while (FakeArgument)
+        {
+            Debug.Log("Spawned");
+            yield return new WaitForSeconds(0.5f);
+            Spawner();
+
+        }
+        yield return null;
+
+    }
 
 
 }
