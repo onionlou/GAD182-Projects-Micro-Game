@@ -18,7 +18,7 @@ EditorBuildSettings:
     path: Assets/Scenes/2 Cannon Fodder.unity
     guid: be0f4be0febcc3a4c8f51e64720382e5
   - enabled: 1
-    path: Assets/Scenes/5 BulletHell Game.unity
+    path: Assets/Scenes/7 BulletHell Game.unity
     guid: d022b48a27ef9c74cae1f9682ba66319
   - enabled: 0
     path: Assets/Scenes/UI.unity

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Linq;
 
 public class WinConditionManager : MonoBehaviour
 {
@@ -7,8 +8,10 @@ public class WinConditionManager : MonoBehaviour
 
     void Start()
     {
-        // Find all objects in the scene that implement IWinCondition
-        winConditions = FindObjectsOfType<MonoBehaviour>(true) as IWinCondition[];
+        // Find all MonoBehaviours that implement IWinCondition
+        winConditions = FindObjectsOfType<MonoBehaviour>(true)
+            .OfType<IWinCondition>()
+            .ToArray();
     }
 
     void Update()
@@ -48,5 +51,4 @@ public class WinConditionManager : MonoBehaviour
             SceneSwapper.instance.LoadUnloadScene("Lose Screen");
         }
     }
-
 }

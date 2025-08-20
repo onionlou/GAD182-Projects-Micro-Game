@@ -894,7 +894,9 @@ MonoBehaviour:
   - 2 Cannon Fodder
   - 3 Quick Magic
   - 4 RPG Select
-  - 5 BulletHell Game
+  - 5 FireFeast
+  - 6 PotionPanic
+  - 7 BulletHell Game
 --- !u!4 &1585992313
 Transform:
   m_ObjectHideFlags: 0
