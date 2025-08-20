@@ -1,9 +1,5 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/Cameron/SS_Melted bar top.png.meta
 guid: d5c47cdb5106ec645a3528ae0e04dfa5
-========
-guid: 8eea11d1872221c4b8f55929076ee044
->>>>>>>> Cameron:Assets/Sprites/Potion Stuff.png.meta
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -97,11 +93,23 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 3
+    buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-<<<<<<<< HEAD:Assets/Sprites/Cameron/SS_Melted bar top.png.meta
       name: SS_Melted bar top_0
       rect:
         serializedVersion: 2
@@ -109,14 +117,6 @@ TextureImporter:
         y: 0
         width: 64
         height: 64
-========
-      name: Potion Stuff_0
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 468
-        width: 51
-        height: 39
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -124,92 +124,6 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 37897c781e03a2448a0639556a926bea
-      internalID: 8219960
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Potion Stuff_1
-      rect:
-        serializedVersion: 2
-        x: 261
-        y: 468
-        width: 51
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a0fa157cef35d43479196ac7bf14cf7b
-      internalID: 1886641764
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Potion Stuff_2
-      rect:
-        serializedVersion: 2
-        x: 69
-        y: 276
-        width: 51
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 44b95af8a91f55049844af92abc162a5
-      internalID: 1657306153
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Potion Stuff_3
-      rect:
-        serializedVersion: 2
-        x: 261
-        y: 276
-        width: 51
-        height: 39
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1d331ebb70cc3124d9eba857c0adb0ec
-      internalID: -138866673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Potion Stuff_4
-      rect:
-        serializedVersion: 2
-        x: 66
-        y: 87
-        width: 54
-        height: 60
->>>>>>>> Cameron:Assets/Sprites/Potion Stuff.png.meta
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-<<<<<<<< HEAD:Assets/Sprites/Cameron/SS_Melted bar top.png.meta
       spriteID: b55f5d7140fa8a14295e8ea52964e4f1
       internalID: -2140636933
       vertices: []
@@ -296,10 +210,6 @@ TextureImporter:
       bones: []
       spriteID: 1bffc6229ce1fa946bf767aef9a86e81
       internalID: -385458699
-========
-      spriteID: f5dac08b535f5f44391ac29d299482b2
-      internalID: 228378251
->>>>>>>> Cameron:Assets/Sprites/Potion Stuff.png.meta
       vertices: []
       indices: 
       edges: []
@@ -315,19 +225,11 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-<<<<<<<< HEAD:Assets/Sprites/Cameron/SS_Melted bar top.png.meta
       SS_Melted bar top_0: -2140636933
       SS_Melted bar top_1: 888626168
       SS_Melted bar top_2: -1110796647
       SS_Melted bar top_3: 1928442313
       SS_Melted bar top_4: -385458699
-========
-      Potion Stuff_0: 8219960
-      Potion Stuff_1: 1886641764
-      Potion Stuff_2: 1657306153
-      Potion Stuff_3: -138866673
-      Potion Stuff_4: 228378251
->>>>>>>> Cameron:Assets/Sprites/Potion Stuff.png.meta
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
