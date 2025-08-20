@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -8,15 +9,18 @@ public class GameManager : MonoBehaviour
     public Canvas mainMenuCanvas;
 
     [Header("UI Menus")]
-    public GameObject winMenuUI;   // Level Complete panel
-    public GameObject loseMenuUI;  // Lose panel
-    public GameObject finalWinMenuUI; // Optional: all levels complete
+    public GameObject winMenuUI;
+    public GameObject loseMenuUI;
+    public GameObject finalWinMenuUI;
+
+    [Header("Scene Transition")]
+    [SerializeField] private float winDelay = 2f;
 
     private bool gameEnded = false;
 
     void Awake()
     {
-        // Ensure only one EventSystem survives
+        DontDestroyOnLoad(gameObject);
         var systems = FindObjectsOfType<EventSystem>();
         if (systems.Length > 1)
         {
@@ -31,16 +35,21 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         AudioManager.instance.PlayMainMenuMusic();
-
-        // Load Main Menu scene additively
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
         Debug.Log("GameManager: Requesting Main Menu load");
 
-        // Load UI overlays if any
         SceneSwapper.instance.OnSceneLoadComplete += OnUIScenesLoaded;
         SceneSwapper.instance.LoadStartingUI();
 
         ResetPanels();
+    }
+    private void HideMainMenuCanvas()
+    {
+        if (mainMenuCanvas != null && mainMenuCanvas.gameObject.activeSelf)
+        {
+            mainMenuCanvas.gameObject.SetActive(false);
+            Debug.Log("Main menu canvas hidden.");
+        }
     }
 
     private void OnUIScenesLoaded()
@@ -77,9 +86,11 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleWin() triggered!");
+        Time.timeScale = 0f;
 
-        // Show the standard win menu — but keep GameMusic playing
         if (winMenuUI) winMenuUI.SetActive(true);
+
+        StartCoroutine(DelayedSceneSwap());
     }
 
     private void HandleLose()
@@ -88,8 +99,8 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleLose() triggered!");
+        Time.timeScale = 0f;
 
-        // Show lose panel
         if (loseMenuUI) loseMenuUI.SetActive(true);
     }
 
@@ -99,11 +110,18 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleFinalWin() triggered!");
+        Time.timeScale = 0f;
 
         if (finalWinMenuUI) finalWinMenuUI.SetActive(true);
-
-        // Now switch to menu music
         AudioManager.instance.PlayMainMenuMusic();
+    }
+
+    private IEnumerator DelayedSceneSwap()
+    {
+        yield return new WaitForSecondsRealtime(winDelay);
+        Time.timeScale = 1f;
+        gameEnded = false;
+        SceneSwapper.instance.LoadNextScene();
     }
 
     // -----------------------------
@@ -113,6 +131,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         ResetGameState();
+        HideMainMenuCanvas();
         AudioManager.instance.PlayGameMusic();
         SceneSwapper.instance.StartGame();
     }
@@ -138,6 +157,7 @@ public class GameManager : MonoBehaviour
     public void BackToMainMenu()
     {
         ResetGameState();
+        if (mainMenuCanvas != null) mainMenuCanvas.gameObject.SetActive(true);
         AudioManager.instance.PlayMainMenuMusic();
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
     }
@@ -149,6 +169,7 @@ public class GameManager : MonoBehaviour
     private void ResetGameState()
     {
         gameEnded = false;
+        Time.timeScale = 1f;
         ResetPanels();
     }
 
@@ -159,8 +180,6 @@ public class GameManager : MonoBehaviour
         if (finalWinMenuUI) finalWinMenuUI.SetActive(false);
     }
 }
-
-
 
 
 

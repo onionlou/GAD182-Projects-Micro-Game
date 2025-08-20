@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
 {
@@ -6,6 +6,7 @@ public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReacti
     private float timer;
     private bool playerHit = false;
     private bool timeExpired = false;
+    private bool outcomeTriggered = false;
 
     public event System.Action OnWin;
     public event System.Action OnLose;
@@ -18,26 +19,34 @@ public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReacti
 
     private void Update()
     {
-        if (timeExpired || playerHit) return;
+        if (outcomeTriggered) return;
 
-        timer -= Time.deltaTime;
-
-        if (timer <= 0f)
+        if (!timeExpired)
         {
-            timeExpired = true;
-            if (CheckWinCondition())
+            timer -= Time.deltaTime;
+
+            if (timer <= 0f)
             {
-                Debug.Log("? Win condition met — time expired without player hit.");
-                OnWin?.Invoke();
+                timeExpired = true;
+
+                if (CheckWinCondition())
+                {
+                    outcomeTriggered = true;
+                    Debug.Log("âœ” Win condition met.");
+                    OnWin?.Invoke();
+                }
             }
         }
 
         if (CheckLoseCondition())
         {
-            Debug.Log("? Lose condition met — player was hit.");
+            outcomeTriggered = true;
+            Debug.Log("âœ– Lose condition met.");
             OnLose?.Invoke();
         }
     }
+
+
 
     public void OnProjectileHit(string hitTag)
     {

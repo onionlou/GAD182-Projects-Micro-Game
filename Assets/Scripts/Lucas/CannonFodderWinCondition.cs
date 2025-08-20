@@ -1,46 +1,53 @@
-using UnityEngine;
+﻿using UnityEngine;
+using System;
+using System.Collections;
 
-public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
+public class CannonFodderWinCondition : MonoBehaviour, IWinCondition
 {
-    [SerializeField] private float timeLimit = 15f;
+    public event Action OnWin;
+    public event Action OnLose;
 
+    [SerializeField] private float timeLimit = 5f;
     private float timer;
     private bool goblinHit = false;
+    private bool sceneReady = false;
 
-    public event System.Action OnWin;
-    public event System.Action OnLose;
-
-    private void Start()
+    private IEnumerator Start()
     {
+        Debug.Log("CannonFodderWinCondition initialized.");
+        yield return new WaitForSeconds(0.5f); // Allow scene to fully initialize
         timer = timeLimit;
+        sceneReady = true;
     }
 
     private void Update()
     {
-        // Decrease timer until time runs out or win condition is met
-        if (!goblinHit)
+        if (!sceneReady || goblinHit) return;
+
+        timer -= Time.deltaTime;
+        if (timer <= 0f && CheckLoseCondition())
         {
-            timer -= Time.deltaTime;
-            if (timer <= 0f && CheckLoseCondition())
-            {
-                OnLose?.Invoke();
-            }
+            Debug.Log("✔ Lose condition met.");
+            OnLose?.Invoke();
         }
     }
 
-    // Triggered when a projectile hits something
     public void OnProjectileHit(string hitTag)
     {
-        if (hitTag == "Enemy" && !goblinHit)
+        if (!sceneReady || goblinHit) return;
+
+        if (hitTag == "Enemy")
         {
             goblinHit = true;
             if (CheckWinCondition())
             {
+                Debug.Log("✔ Win condition met.");
                 OnWin?.Invoke();
             }
         }
     }
 
+    // ✅ Interface implementations
     public bool CheckWinCondition()
     {
         return goblinHit;

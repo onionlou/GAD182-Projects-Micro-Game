@@ -62,14 +62,14 @@ public class Fireball : MonoBehaviour
         }
 
         // Register hit with win condition if relevant
-        if (winCondition != null && other.CompareTag("Player"))
+        if (winCondition != null && (other.CompareTag("Player") || other.CompareTag("Enemy")))
         {
-            // Instead of knowing exact win condition type, we call a standard method
             if (winCondition is IProjectileReactive projectileReactive)
             {
                 projectileReactive.OnProjectileHit(other.tag);
             }
         }
+
 
         // Destroy projectile on impact
         if (other.CompareTag("Player") || other.CompareTag("Enemy") || other.CompareTag("Wall"))
