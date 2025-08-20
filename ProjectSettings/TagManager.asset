@@ -45,3 +45,21 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Floor
+    uniqueID: 861661083
+    locked: 0
+  - name: Player
+    uniqueID: 2467512735
+    locked: 0
+  - name: Door 2
+    uniqueID: 3245731519
+    locked: 0
+  - name: Walls
+    uniqueID: 3636154237
+    locked: 0
+  - name: Door 1
+    uniqueID: 3257178571
+    locked: 0
+  - name: Interactable
+    uniqueID: 2178251025
+    locked: 0
