@@ -5,8 +5,8 @@ using UnityEngine;
 
 public class BH_Spawn : MonoBehaviour
 {
-    public bool FakeArgument = true;
-
+    public bool IsSpawning = true;
+    public AnimationCurve SpawnCurve;
 
     public List<GameObject> ItemsToSpawn = new List<GameObject>();
 
@@ -15,13 +15,9 @@ public class BH_Spawn : MonoBehaviour
     
     private void Update()
     {
-        
 
-        if (Input.GetKey(KeyCode.Space))
-        {
-            Spawner();
 
-        }
+
     }
 
 
@@ -39,17 +35,22 @@ public class BH_Spawn : MonoBehaviour
 
     IEnumerator Start()
     {
-        Debug.Log("IEnumerable Called");
+        GameEvents.current.OnPlayerHit += PlayerHit;
 
-        while (FakeArgument)
+        while (IsSpawning)
         {
-            Debug.Log("Spawned");
-            yield return new WaitForSeconds(0.5f);
+
+
+            yield return new WaitForSeconds(SpawnCurve.Evaluate(Time.time));
             Spawner();
 
         }
         yield return null;
 
+    }
+    public void PlayerHit()
+    {
+        IsSpawning = false;
     }
 
 

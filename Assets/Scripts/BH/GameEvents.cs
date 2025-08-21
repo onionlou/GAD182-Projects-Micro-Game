@@ -12,12 +12,16 @@ public class GameEvents : MonoBehaviour
         current = this;
     }
 
-    public event Action gotHurt;    // onDoorWay
-    public void canHurt()           //DoorwayTrigger
+    public event Action OnPlayerHit;
+    public void PlayerHit()
     {
-        if (gotHurt!= null)
+        /// WAIT 5 SEC, then Game end HERE
+
+
+        if (OnPlayerHit != null)
         {
-            canHurt();
+            OnPlayerHit();
+            
         }
     }
     

@@ -6,29 +6,26 @@ public class BH_Item : MonoBehaviour
 {
 
     public BoxCollider2D PlayerCollider;
-
+    public BoxCollider2D DeletePlane;
 
 
 
     private void Start()
     {
         PlayerCollider = GameObject.Find("Player").GetComponent<BoxCollider2D>();
-    }
-
-
-    // Update is called once per frame
-    void Update()
-    {
+        DeletePlane = GameObject.Find("Delete plane").GetComponent<BoxCollider2D>();
         
     }
+
+
     void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.collider == PlayerCollider)
         {
-            Debug.Log("Hit");
+            GameEvents.current.PlayerHit();
 
         }
-        else
+        if (collision.collider == DeletePlane)
         {
             Destroy(this.gameObject);
         }
