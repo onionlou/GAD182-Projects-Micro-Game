@@ -14,10 +14,24 @@ public class QMHandler : MonoBehaviour
     private bool drawn = false;
     private bool pressed = false;
 
+    public GameObject WizardPrefab;
+    public GameObject Wizard_Idle;
+    public GameObject FrogPrefab;
+
+    private Animator wizardAnimator;
+    private Animator frogAnimator;
+
+    public AudioSource audioSource;
+    public AudioClip spell;
+    public AudioClip ribbit;
+    public AudioClip dead;
+
     void Start()
     {
         drawTime = Random.Range(3.0f, 6.0f);
         Debug.Log("Draw time: " + drawTime);
+        wizardAnimator = WizardPrefab.GetComponent<Animator>();
+        frogAnimator = FrogPrefab.GetComponent<Animator>();
     }
 
     void Update()
@@ -35,8 +49,12 @@ public class QMHandler : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                 QMText.text = "Gotcha!";
+                Wizard_Idle.SetActive(false);
+                WizardPrefab.SetActive(true);
+                audioSource.PlayOneShot(spell);
                 pressed = true;
                 Debug.Log("Too Early");
+                audioSource.PlayOneShot(dead);
                 }
             }
         }
@@ -47,6 +65,10 @@ public class QMHandler : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 QMText.text = "Ribbit";
+                FrogPrefab.SetActive(true);
+                WizardPrefab.SetActive(false);
+                frogAnimator.Play("Anim_Frogl", 0, 0f);
+                audioSource.PlayOneShot(ribbit);
                 pressed = true;
                 Debug.Log("WON");
             }
@@ -54,6 +76,7 @@ public class QMHandler : MonoBehaviour
             {
                 QMText.text = "Gotcha!";
                 pressed = true;
+                audioSource.PlayOneShot(dead);
                 Debug.Log("Game Over");
             }
         }
@@ -63,7 +86,11 @@ public class QMHandler : MonoBehaviour
     {
         magicTime = 2.0f;
         drawn = true;
+        audioSource.PlayOneShot(spell);
         QMText.text = "Magic!";
+        Wizard_Idle.SetActive(false);
+        WizardPrefab.SetActive(true);
+        wizardAnimator.Play("Anim_WizardSpell", 0, 0f);
         Debug.Log("DRAW!!!");
     }
 }
