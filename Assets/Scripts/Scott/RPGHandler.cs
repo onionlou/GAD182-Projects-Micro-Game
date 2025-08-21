@@ -15,6 +15,13 @@ public class RPGHandler : MonoBehaviour
     public float decisionTime;
     private bool OutofTime;
 
+    public AudioSource audioSource;
+    public AudioClip music;
+    public AudioClip hit;
+    public AudioClip heal;
+    public AudioClip hurt;
+    public AudioClip run;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -22,6 +29,7 @@ public class RPGHandler : MonoBehaviour
         chosenSituation = Situation[randomIndex];
         Debug.Log("Situation: " + chosenSituation);
         decisionTime = 5.0f;
+        audioSource.PlayOneShot(music);
         Pressed = false;
         OutofTime = false;
         BattleText.text = "A goblin blocks your path. What do you do?\nLeft Arrow Key - Fight                         Right Arrow Key - Heal\n                             Down Arrow Key - Run";
@@ -91,6 +99,7 @@ public class RPGHandler : MonoBehaviour
                 BattleText.text = "You healed all your HP.";
                 HPText.text = "HP: 20";
                 HPText.color = Color.white;
+                audioSource.PlayOneShot(heal);
                 StartCoroutine(HealCorrect());
             }
             if(chosenSituation == "Fight")
@@ -100,6 +109,7 @@ public class RPGHandler : MonoBehaviour
                 BattleText.text = "You healed all your HP.";
                 HPText.text = "HP: 20";
                 HPText.color = Color.white;
+                audioSource.PlayOneShot(heal);
                 StartCoroutine(HealWrongF());
             }
             if(chosenSituation == "Run")
@@ -109,6 +119,7 @@ public class RPGHandler : MonoBehaviour
                 BattleText.text = "You healed all your HP.";
                 HPText.text = "HP: 20";
                 HPText.color = Color.white;
+                audioSource.PlayOneShot(heal);
                 StartCoroutine(HealWrongR());
             }
         }
@@ -164,6 +175,7 @@ public class RPGHandler : MonoBehaviour
 	{
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin was defeated.";
+        audioSource.PlayOneShot(hit);
         S_Goblin_256x256.SetActive(false);
         GoblinText.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);
@@ -179,6 +191,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP due to poison.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -188,12 +201,14 @@ public class RPGHandler : MonoBehaviour
 	{
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin Lost 3HP";
+        audioSource.PlayOneShot(hit);
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin Attacks!";
         yield return new WaitForSeconds(2f);
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -203,6 +218,7 @@ public class RPGHandler : MonoBehaviour
 	{
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin died due to poison.";
+        audioSource.PlayOneShot(hit);
         S_Goblin_256x256.SetActive(false);
         GoblinText.gameObject.SetActive(false);
         yield return new WaitForSeconds(2f);
@@ -218,6 +234,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -231,6 +248,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -242,6 +260,7 @@ public class RPGHandler : MonoBehaviour
         BattleText.text = "...";
         yield return new WaitForSeconds(2f);
         BattleText.text = "You Got Away Safely!";
+        audioSource.PlayOneShot(run, 1.0f);
     }
 
     //chose run during fight
@@ -257,6 +276,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -274,6 +294,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
@@ -289,6 +310,7 @@ public class RPGHandler : MonoBehaviour
         HPText.text = "HP: 0";
         HPText.color = Color.red;
         BattleText.text = "You lost all your HP.";
+        audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
         BattleText.text = "Game Over.";
     }
