@@ -28,6 +28,20 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameEnded)
+        {
+            var uiManager = FindObjectOfType<UIManager>();
+            if (uiManager != null)
+            {
+                if (Time.timeScale == 0f)
+                    uiManager.HidePauseMenu();
+                else
+                    uiManager.ShowPauseMenu();
+            }
+        }
+    }
 
     private void Start()
     {
@@ -86,8 +100,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         if (winMenuUI) winMenuUI.SetActive(true);
-    }
 
+        AudioManager.instance.PlayWinSound(overrideMusic: true, resumeMusicAfter: false);
+    }
 
     private void HandleLose()
     {
@@ -110,7 +125,6 @@ public class GameManager : MonoBehaviour
         }
     }
 
-
     public void HandleFinalWin()
     {
         if (gameEnded) return;
@@ -120,8 +134,9 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         if (finalWinMenuUI) finalWinMenuUI.SetActive(true);
-        AudioManager.instance.PlayMainMenuMusic();
+        AudioManager.instance.PlayFinalWinSound();
     }
+
 
     // -----------------------------
     // UI Buttons
@@ -157,17 +172,20 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator ReloadMicrogameScene(string sceneName)
     {
-        // Unload current microgame scene
         AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(sceneName);
         while (!unloadOp.isDone)
             yield return null;
 
-        // Reload it additively
         AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         while (!loadOp.isDone)
             yield return null;
 
         Debug.Log($"Microgame scene {sceneName} reloaded.");
+
+        // Wait one frame to ensure scene objects are initialized
+        yield return null;
+
+        SubscribeToWinConditions(); // Re-hook win/lose events
     }
 
     public void BackToMainMenu()
@@ -177,6 +195,7 @@ public class GameManager : MonoBehaviour
         AudioManager.instance.PlayMainMenuMusic();
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
     }
+
 
     // -----------------------------
     // Helpers

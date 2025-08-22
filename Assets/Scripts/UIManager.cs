@@ -7,6 +7,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winPanel;
     [SerializeField] private GameObject losePanel;
     [SerializeField] private GameObject winMenuPanel;
+    [SerializeField] private GameObject pausePanel;
 
     [Header("Optional Buttons")]
     public Button nextButton;   // For progressing to the next game
@@ -61,5 +62,22 @@ public class UIManager : MonoBehaviour
     {
         Time.timeScale = 1f;
         Debug.Log("Game resumed.");
+    }
+    public void ShowPauseMenu()
+    {
+        pausePanel?.SetActive(true);
+        PauseGame();
+    }
+
+    public void HidePauseMenu()
+    {
+        pausePanel?.SetActive(false);
+        ResumeGame();
+    }
+
+    public void ExitToMainMenuFromPause()
+    {
+        ResumeGame();
+        FindObjectOfType<GameManager>()?.BackToMainMenu();
     }
 }

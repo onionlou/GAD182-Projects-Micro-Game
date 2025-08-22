@@ -32,4 +32,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/7 BulletHell Game.unity
     guid: d022b48a27ef9c74cae1f9682ba66319
+  - enabled: 1
+    path: Assets/Scenes/Win Menu.unity
+    guid: 0e64ce102d08d124eba123138fcbaaca
   m_configObjects: {}
