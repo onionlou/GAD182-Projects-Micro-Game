@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
+using System.Collections;
 using System.Linq;
 
 public class GameManager : MonoBehaviour
@@ -8,15 +9,15 @@ public class GameManager : MonoBehaviour
     public Canvas mainMenuCanvas;
 
     [Header("UI Menus")]
-    public GameObject winMenuUI;   // Level Complete panel
-    public GameObject loseMenuUI;  // Lose panel
-    public GameObject finalWinMenuUI; // Optional: all levels complete
+    public GameObject winMenuUI;
+    public GameObject loseMenuUI;
+    public GameObject finalWinMenuUI;
 
     private bool gameEnded = false;
 
     void Awake()
     {
-        // Ensure only one EventSystem survives
+        DontDestroyOnLoad(gameObject);
         var systems = FindObjectsOfType<EventSystem>();
         if (systems.Length > 1)
         {
@@ -27,20 +28,39 @@ public class GameManager : MonoBehaviour
             }
         }
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape) && !gameEnded)
+        {
+            var uiManager = FindObjectOfType<UIManager>();
+            if (uiManager != null)
+            {
+                if (Time.timeScale == 0f)
+                    uiManager.HidePauseMenu();
+                else
+                    uiManager.ShowPauseMenu();
+            }
+        }
+    }
 
     private void Start()
     {
         AudioManager.instance.PlayMainMenuMusic();
-
-        // Load Main Menu scene additively
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
         Debug.Log("GameManager: Requesting Main Menu load");
 
-        // Load UI overlays if any
         SceneSwapper.instance.OnSceneLoadComplete += OnUIScenesLoaded;
         SceneSwapper.instance.LoadStartingUI();
 
         ResetPanels();
+    }
+    private void HideMainMenuCanvas()
+    {
+        if (mainMenuCanvas != null && mainMenuCanvas.gameObject.activeSelf)
+        {
+            mainMenuCanvas.gameObject.SetActive(false);
+            Debug.Log("Main menu canvas hidden.");
+        }
     }
 
     private void OnUIScenesLoaded()
@@ -77,9 +97,11 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleWin() triggered!");
+        Time.timeScale = 0f;
 
-        // Show the standard win menu — but keep GameMusic playing
         if (winMenuUI) winMenuUI.SetActive(true);
+
+        AudioManager.instance.PlayWinSound(overrideMusic: true, resumeMusicAfter: false);
     }
 
     private void HandleLose()
@@ -89,8 +111,18 @@ public class GameManager : MonoBehaviour
 
         Debug.Log("GameManager: HandleLose() triggered!");
 
-        // Show lose panel
-        if (loseMenuUI) loseMenuUI.SetActive(true);
+        // Pause and show lose UI via UIManager
+        var uiManager = FindObjectOfType<UIManager>();
+        if (uiManager != null)
+        {
+            uiManager.ShowLoseUI();
+        }
+        else
+        {
+            Debug.LogWarning("GameManager: UIManager not found. Showing fallback loseMenuUI.");
+            if (loseMenuUI) loseMenuUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
 
     public void HandleFinalWin()
@@ -99,12 +131,12 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleFinalWin() triggered!");
+        Time.timeScale = 0f;
 
         if (finalWinMenuUI) finalWinMenuUI.SetActive(true);
-
-        // Now switch to menu music
-        AudioManager.instance.PlayMainMenuMusic();
+        AudioManager.instance.PlayFinalWinSound();
     }
+
 
     // -----------------------------
     // UI Buttons
@@ -113,6 +145,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         ResetGameState();
+        HideMainMenuCanvas();
         AudioManager.instance.PlayGameMusic();
         SceneSwapper.instance.StartGame();
     }
@@ -127,20 +160,42 @@ public class GameManager : MonoBehaviour
         ResetGameState();
         SceneSwapper.instance.LoadNextScene();
     }
-
     public void RestartScene()
     {
         ResetGameState();
-        var currentScene = SceneManager.GetActiveScene().name;
-        SceneSwapper.instance.LoadUnloadScene(currentScene);
+
+        string currentScene = SceneManager.GetActiveScene().name;
+        Debug.Log($"Restarting microgame scene: {currentScene}");
+
+        StartCoroutine(ReloadMicrogameScene(currentScene));
+    }
+
+    private IEnumerator ReloadMicrogameScene(string sceneName)
+    {
+        AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(sceneName);
+        while (!unloadOp.isDone)
+            yield return null;
+
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!loadOp.isDone)
+            yield return null;
+
+        Debug.Log($"Microgame scene {sceneName} reloaded.");
+
+        // Wait one frame to ensure scene objects are initialized
+        yield return null;
+
+        SubscribeToWinConditions(); // Re-hook win/lose events
     }
 
     public void BackToMainMenu()
     {
         ResetGameState();
+        if (mainMenuCanvas != null) mainMenuCanvas.gameObject.SetActive(true);
         AudioManager.instance.PlayMainMenuMusic();
         SceneSwapper.instance.LoadUnloadScene("Main Menu");
     }
+
 
     // -----------------------------
     // Helpers
@@ -149,6 +204,7 @@ public class GameManager : MonoBehaviour
     private void ResetGameState()
     {
         gameEnded = false;
+        Time.timeScale = 1f;
         ResetPanels();
     }
 
@@ -159,40 +215,3 @@ public class GameManager : MonoBehaviour
         if (finalWinMenuUI) finalWinMenuUI.SetActive(false);
     }
 }
-
-
-
-
-
-/* PREVIOUS SCRIPT VERSION
-//To ensure that there's no conflicts on loading, we tell the SceneSwapper to load our scenes from Start here, to prevent script load execution errors
-void Start()
-    {
-        //Tell SceneSwapper to load the starting UI
-        SceneSwapper.instance.LoadStartingUI();
-        //RandomSelectScene();
-        SelectScene("5 BulletHell Game");
-    }
-
-    public void RandomSelectScene()
-    {
-        int random = Random.Range(0, SceneSwapper.instance.gameScenes.Length);
-
-        Debug.Log(random);
-        //Also tell SceneSwapper to load the game scene at position 0
-        SceneSwapper.instance.LoadScene(random);
-    }QA
-
-    public void SelectScene(string sceneName)
-    {
-        SceneSwapper.instance.LoadUnloadScene(sceneName);
-    }
-
-    /*public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneSwapper.instance.LoadUnloadScene(SceneSwapper.instance.CurrentScene);
-            RandomSelectScene();
-        }
-    } */

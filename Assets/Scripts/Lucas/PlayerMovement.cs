@@ -2,7 +2,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [Header("Movement Settings")]
     public float moveSpeed = 5f;
+    [SerializeField] private bool horizontalOnly = false;
 
     private Rigidbody2D rb;
     private Animator animator;
@@ -12,23 +14,38 @@ public class PlayerMovement : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
+
+        if (animator == null)
+        {
+            Debug.Log("PlayerMovement: No Animator found — animation will be skipped.");
+        }
     }
 
     void Update()
     {
-        // Get raw input (no smoothing)
+        // Get raw input
         movement.x = Input.GetAxisRaw("Horizontal");
         movement.y = Input.GetAxisRaw("Vertical");
 
-        // Prioritise the stronger axis to lock to 4 directions
-        if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
-            movement.y = 0; // Lock vertical if moving more horizontally
+        if (horizontalOnly)
+        {
+            movement.y = 0f; // Lock vertical movement
+        }
         else
-            movement.x = 0; // Lock horizontal if moving more vertically
+        {
+            // Prioritize stronger axis for 4-directional locking
+            if (Mathf.Abs(movement.x) > Mathf.Abs(movement.y))
+                movement.y = 0f;
+            else
+                movement.x = 0f;
+        }
 
-        // Send values to animator
-        animator.SetFloat("MoveX", movement.x);
-        animator.SetFloat("MoveY", movement.y);
+        // Update animator if present
+        if (animator != null)
+        {
+            animator.SetFloat("MoveX", movement.x);
+            animator.SetFloat("MoveY", movement.y);
+        }
     }
 
     void FixedUpdate()

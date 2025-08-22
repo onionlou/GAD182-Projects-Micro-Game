@@ -1,11 +1,11 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 
 public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
 {
     [SerializeField] private float timeLimit = 15f;
     private float timer;
     private bool playerHit = false;
-    private bool timeExpired = false;
+    private bool outcomeTriggered = false;
 
     public event System.Action OnWin;
     public event System.Action OnLose;
@@ -18,41 +18,50 @@ public class DodgeWinCondition : MonoBehaviour, IWinCondition, IProjectileReacti
 
     private void Update()
     {
-        if (timeExpired || playerHit) return;
+        if (outcomeTriggered) return;
 
+        // Countdown
         timer -= Time.deltaTime;
 
         if (timer <= 0f)
         {
-            timeExpired = true;
-            if (CheckWinCondition())
+            // Only win if timer ran out and player was not hit
+            if (!playerHit)
             {
-                Debug.Log("? Win condition met — time expired without player hit.");
-                OnWin?.Invoke();
+                TriggerWin();
             }
-        }
-
-        if (CheckLoseCondition())
-        {
-            Debug.Log("? Lose condition met — player was hit.");
-            OnLose?.Invoke();
         }
     }
 
     public void OnProjectileHit(string hitTag)
     {
+        if (outcomeTriggered) return;
+
         Debug.Log($"Projectile hit detected: {hitTag}");
         if (hitTag == "Player")
         {
             playerHit = true;
-            if (CheckLoseCondition())
-            {
-                Debug.Log("? Triggering lose due to player hit.");
-                OnLose?.Invoke();
-            }
+            TriggerLose();
         }
     }
 
-    public bool CheckWinCondition() => timeExpired && !playerHit;
+    private void TriggerWin()
+    {
+        if (outcomeTriggered) return;
+        outcomeTriggered = true;
+        Debug.Log("âœ” Win condition met.");
+        OnWin?.Invoke();
+    }
+
+    private void TriggerLose()
+    {
+        if (outcomeTriggered) return;
+        outcomeTriggered = true;
+        Debug.Log("âœ– Lose condition met.");
+        OnLose?.Invoke();
+    }
+
+    // These methods are optional but satisfy the interface
+    public bool CheckWinCondition() => timer <= 0f && !playerHit;
     public bool CheckLoseCondition() => playerHit;
 }
