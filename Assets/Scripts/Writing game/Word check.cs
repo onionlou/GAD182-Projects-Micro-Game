@@ -12,8 +12,10 @@ public class Wordcheck : MonoBehaviour
     int intWord;
     string activeWord;
 
-    public int currentRound;
-    public int MaxRounds = 3;
+    public int LostRounds;
+    public int WonRounds;
+    public int lostRoundToFailGame = 3;
+    public int WonRoundToWinGame = 3;
 
     public float TimeToAnswer;
     bool IsGameOver;
@@ -22,6 +24,9 @@ public class Wordcheck : MonoBehaviour
     public TMP_Text SpellText;
 
     private Coroutine activeCoroutine;
+
+    public Animator HeroAni;
+    public Animator EnemyAni;
 
 
     public List<TMPro.TMP_FontAsset> FontList = new List<TMPro.TMP_FontAsset>();
@@ -32,7 +37,7 @@ public class Wordcheck : MonoBehaviour
     {
         if (activeCoroutine != null)
         {
-            StopCoroutine(activeCoroutine); 
+            StopCoroutine(activeCoroutine);
         }
 
         activeCoroutine = StartCoroutine(routine);
@@ -44,13 +49,14 @@ public class Wordcheck : MonoBehaviour
     void Start()
     {
         RoundStart();
-        
     }
 
     void RoundStart()
     {
-        //enemy gets closer
+        EnemyAni.SetFloat("Stage Float", LostRounds);
+
         StartNewCoroutine(Stopwatch());
+        SpellText.rectTransform.anchoredPosition = new Vector3(336, -261, 0);
 
         intWord = Random.Range(0, words.Count);
         activeWord = words[intWord];
@@ -70,22 +76,23 @@ public class Wordcheck : MonoBehaviour
     {
         if (TypedWord == activeWord)
         {
-            if (currentRound >= MaxRounds)
+            if (WonRounds == WonRoundToWinGame)
             {
                 //win end game
 
                 //enemy dies
                 Debug.Log("won Game");
-                GameEnd(true);
+                StartNewCoroutine(GameEnd(true));
+
                 return;
             }
 
 
             //win round
 
-            //shoot fireball at enemys
-            currentRound++;
-            RoundStart();
+
+            WonRounds++;
+            StartNewCoroutine(WaitForAnimation());
             Debug.Log("won round");
 
 
@@ -96,31 +103,40 @@ public class Wordcheck : MonoBehaviour
         }
 
     }
+    IEnumerator WaitForAnimation()
+    {
+        SpellText.rectTransform.anchoredPosition = new Vector3(353, -403, 0);
+        HeroAni.SetBool("Is Attacking", true);
+        yield return new WaitForSeconds(1);
+        HeroAni.SetBool("Is Attacking", false);
 
+        RoundStart();
+        yield return null;
+    }
 
     public void Lost()
     {
-          if (currentRound >= MaxRounds)
+        if (LostRounds >= lostRoundToFailGame)
         {
             //lose end game
             //you die
             Debug.Log("lost Game");
-            
-            GameEnd(false);
+
+            StartNewCoroutine(GameEnd(false));
             return;
-          }
+        }
 
-            //lose round
+        //lose round
 
-            //shoot dud at enemy
-            
-            currentRound++;
-            RoundStart();
-            Debug.Log("lost round");
+        //shoot dud at enemy
 
-        
+        LostRounds++;
+        RoundStart();
+        Debug.Log("lost round");
+
+
     }
-   
+
 
     IEnumerator Stopwatch()
     {
@@ -130,20 +146,28 @@ public class Wordcheck : MonoBehaviour
         {
             Lost();
         }
-            
-        
-            yield return null;
 
+
+        yield return null;
     }
 
-    public void GameEnd(bool score)
+    IEnumerator GameEnd(bool score)
     {
         IsGameOver = true;
         TextField.SetActive(false);
 
+        yield return new WaitForSeconds(3);
+
         //if score is true = won
         //if score is flase = lost
 
+        yield return null;
     }
+
+
+    //to add
+    //  death animation
+    //  count down on UI 
+
 
 }
