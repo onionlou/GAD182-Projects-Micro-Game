@@ -9,10 +9,6 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject winMenuPanel;
     [SerializeField] private GameObject pausePanel;
 
-    [Header("Optional Buttons")]
-    public Button nextButton;   // For progressing to the next game
-    public Button retryButton;  // For retrying the same game
-
     private void Awake()
     {
         // Ensure panels start hidden
