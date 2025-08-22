@@ -2,18 +2,13 @@ using UnityEngine;
 
 public class Clickable : MonoBehaviour
 {
-    public int spriteIndex;         // Unique index assigned in inspector
-    public string displayName;      // Name shown in the order UI
-
+    public int spriteIndex;       // Set in Inspector
+    public string displayName;    // Friendly name for UI
     private ClickOrder gameManager;
 
     void Start()
     {
         gameManager = FindObjectOfType<ClickOrder>();
-        if (gameManager == null)
-        {
-            Debug.LogError("Clickable: No ClickOrder found in scene.");
-        }
     }
 
     void OnMouseDown()

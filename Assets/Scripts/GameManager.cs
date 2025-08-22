@@ -13,9 +13,6 @@ public class GameManager : MonoBehaviour
     public GameObject loseMenuUI;
     public GameObject finalWinMenuUI;
 
-    [Header("Scene Transition")]
-    [SerializeField] private float winDelay = 2f;
-
     private bool gameEnded = false;
 
     void Awake()
@@ -89,9 +86,8 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 0f;
 
         if (winMenuUI) winMenuUI.SetActive(true);
-
-        StartCoroutine(DelayedSceneSwap());
     }
+
 
     private void HandleLose()
     {
@@ -99,10 +95,21 @@ public class GameManager : MonoBehaviour
         gameEnded = true;
 
         Debug.Log("GameManager: HandleLose() triggered!");
-        Time.timeScale = 0f;
 
-        if (loseMenuUI) loseMenuUI.SetActive(true);
+        // Pause and show lose UI via UIManager
+        var uiManager = FindObjectOfType<UIManager>();
+        if (uiManager != null)
+        {
+            uiManager.ShowLoseUI();
+        }
+        else
+        {
+            Debug.LogWarning("GameManager: UIManager not found. Showing fallback loseMenuUI.");
+            if (loseMenuUI) loseMenuUI.SetActive(true);
+            Time.timeScale = 0f;
+        }
     }
+
 
     public void HandleFinalWin()
     {
@@ -114,14 +121,6 @@ public class GameManager : MonoBehaviour
 
         if (finalWinMenuUI) finalWinMenuUI.SetActive(true);
         AudioManager.instance.PlayMainMenuMusic();
-    }
-
-    private IEnumerator DelayedSceneSwap()
-    {
-        yield return new WaitForSecondsRealtime(winDelay);
-        Time.timeScale = 1f;
-        gameEnded = false;
-        SceneSwapper.instance.LoadNextScene();
     }
 
     // -----------------------------
@@ -146,12 +145,29 @@ public class GameManager : MonoBehaviour
         ResetGameState();
         SceneSwapper.instance.LoadNextScene();
     }
-
     public void RestartScene()
     {
         ResetGameState();
-        var currentScene = SceneManager.GetActiveScene().name;
-        SceneSwapper.instance.LoadUnloadScene(currentScene);
+
+        string currentScene = SceneManager.GetActiveScene().name;
+        Debug.Log($"Restarting microgame scene: {currentScene}");
+
+        StartCoroutine(ReloadMicrogameScene(currentScene));
+    }
+
+    private IEnumerator ReloadMicrogameScene(string sceneName)
+    {
+        // Unload current microgame scene
+        AsyncOperation unloadOp = SceneManager.UnloadSceneAsync(sceneName);
+        while (!unloadOp.isDone)
+            yield return null;
+
+        // Reload it additively
+        AsyncOperation loadOp = SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
+        while (!loadOp.isDone)
+            yield return null;
+
+        Debug.Log($"Microgame scene {sceneName} reloaded.");
     }
 
     public void BackToMainMenu()
@@ -180,38 +196,3 @@ public class GameManager : MonoBehaviour
         if (finalWinMenuUI) finalWinMenuUI.SetActive(false);
     }
 }
-
-
-
-/* PREVIOUS SCRIPT VERSION
-//To ensure that there's no conflicts on loading, we tell the SceneSwapper to load our scenes from Start here, to prevent script load execution errors
-void Start()
-    {
-        //Tell SceneSwapper to load the starting UI
-        SceneSwapper.instance.LoadStartingUI();
-        //RandomSelectScene();
-        SelectScene("5 BulletHell Game");
-    }
-
-    public void RandomSelectScene()
-    {
-        int random = Random.Range(0, SceneSwapper.instance.gameScenes.Length);
-
-        Debug.Log(random);
-        //Also tell SceneSwapper to load the game scene at position 0
-        SceneSwapper.instance.LoadScene(random);
-    }QA
-
-    public void SelectScene(string sceneName)
-    {
-        SceneSwapper.instance.LoadUnloadScene(sceneName);
-    }
-
-    /*public void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            SceneSwapper.instance.LoadUnloadScene(SceneSwapper.instance.CurrentScene);
-            RandomSelectScene();
-        }
-    } */
