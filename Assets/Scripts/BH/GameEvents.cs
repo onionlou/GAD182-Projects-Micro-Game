@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameEvents : MonoBehaviour
@@ -15,8 +16,9 @@ public class GameEvents : MonoBehaviour
     public event Action OnPlayerHit;
     public void PlayerHit()
     {
-        /// WAIT 5 SEC, then Game end HERE
+       
 
+        StartCoroutine("GameEnd");
 
         if (OnPlayerHit != null)
         {
@@ -24,6 +26,13 @@ public class GameEvents : MonoBehaviour
             
         }
     }
-    
+    IEnumerator GameEnd()
+    {
+       yield return new WaitForSeconds(4);
+
+        //then Game end HERE
+        Debug.Log("Game has ended");
+       yield return null;
+    }
 
 }
