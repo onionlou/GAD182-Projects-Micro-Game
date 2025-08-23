@@ -9,8 +9,8 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Stage
-    m_EventTreshold: 2
+    m_ConditionEvent: Stage Float
+    m_EventTreshold: 1
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4802407016369647410}
   m_Solo: 0
@@ -20,7 +20,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -34,8 +34,8 @@ AnimatorStateTransition:
   m_Name: 
   m_Conditions:
   - m_ConditionMode: 3
-    m_ConditionEvent: Stage
-    m_EventTreshold: 1
+    m_ConditionEvent: Stage Float
+    m_EventTreshold: 0
   m_DstStateMachine: {fileID: 0}
   m_DstState: {fileID: 4285943971361782192}
   m_Solo: 0
@@ -45,7 +45,7 @@ AnimatorStateTransition:
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
   m_ExitTime: 0.75
-  m_HasExitTime: 1
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
@@ -59,7 +59,7 @@ AnimatorController:
   m_Name: writing_monster
   serializedVersion: 5
   m_AnimatorParameters:
-  - m_Name: Stage
+  - m_Name: Stage Float
     m_Type: 1
     m_DefaultFloat: 0
     m_DefaultInt: 0
@@ -169,13 +169,13 @@ AnimatorStateMachine:
   m_ChildStates:
   - serializedVersion: 1
     m_State: {fileID: 1891656002958952677}
-    m_Position: {x: 330, y: -60, z: 0}
+    m_Position: {x: 220, y: 40, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4285943971361782192}
     m_Position: {x: 449.95374, y: 41.32605, z: 0}
   - serializedVersion: 1
     m_State: {fileID: 4802407016369647410}
-    m_Position: {x: 590, y: 150, z: 0}
+    m_Position: {x: 670, y: 40, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []

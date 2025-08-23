@@ -173,7 +173,9 @@ MonoBehaviour:
   - fart
   - expelliarmus
   - lumos
-  - ' forcecage'
+  - forcecage
+  - acid
+  - spirit burn
   LostRounds: 0
   WonRounds: 0
   lostRoundToFailGame: 3
