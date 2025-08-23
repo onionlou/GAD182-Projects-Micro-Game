@@ -7,8 +7,6 @@ public class AudioManager : MonoBehaviour
     [Header("Music Clips")]
     public AudioClip mainMenuMusic;
     public AudioClip gameMusic;
-    public AudioClip winSound;
-    public AudioClip finalWinSound;
 
     [Header("Audio Sources")]
     public AudioSource musicSource;
@@ -16,6 +14,7 @@ public class AudioManager : MonoBehaviour
 
     private void Awake()
     {
+        // Singleton pattern
         if (instance != null && instance != this)
         {
             Destroy(gameObject);
@@ -23,11 +22,12 @@ public class AudioManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        DontDestroyOnLoad(gameObject); // Persist between scenes
     }
 
     private void Start()
     {
+        // Start in main menu context
         PlayMainMenuMusic();
     }
 
@@ -43,20 +43,10 @@ public class AudioManager : MonoBehaviour
 
     private void PlayMusic(AudioClip clip)
     {
-        if (clip == null) return;
         if (musicSource.clip == clip && musicSource.isPlaying) return;
-
         musicSource.clip = clip;
         musicSource.loop = true;
         musicSource.Play();
-    }
-
-    public void StopMusic()
-    {
-        if (musicSource.isPlaying)
-        {
-            musicSource.Stop();
-        }
     }
 
     public void PlaySFX(AudioClip clip)
@@ -66,34 +56,4 @@ public class AudioManager : MonoBehaviour
             sfxSource.PlayOneShot(clip);
         }
     }
-
-    public void PlayWinSound(bool overrideMusic = true, bool resumeMusicAfter = false)
-    {
-        if (winSound == null) return;
-
-        if (overrideMusic)
-        {
-            StopMusic();
-        }
-
-        sfxSource.PlayOneShot(winSound);
-
-        if (resumeMusicAfter)
-        {
-            Invoke(nameof(ResumeMusic), winSound.length);
-        }
-    }
-    public void PlayFinalWinSound()
-    {
-        if (finalWinSound != null)
-        {
-            sfxSource.PlayOneShot(finalWinSound);
-        }
-    }
-
-    private void ResumeMusic()
-    {
-        PlayGameMusic(); // Or PlayMainMenuMusic depending on context
-    }
-
 }

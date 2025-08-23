@@ -13,7 +13,7 @@ public class Fireball : MonoBehaviour
 
     private Vector2 direction;
     private bool hasDirection = false;
-    private IProjectileReactive projectileReactive;
+    private IWinCondition winCondition;
 
     private void Start()
     {
@@ -24,15 +24,14 @@ public class Fireball : MonoBehaviour
             audioSource.PlayOneShot(launchSound);
         }
 
-        // Find the active win condition that implements IProjectileReactive
-        projectileReactive = FindObjectsOfType<MonoBehaviour>()
-            .OfType<IProjectileReactive>()
-            .FirstOrDefault();
+        // Find the active win condition
+        winCondition = FindObjectsOfType<MonoBehaviour>().OfType<IWinCondition>().FirstOrDefault();
 
-        if (projectileReactive == null)
+        if (winCondition == null)
         {
-            Debug.LogWarning("[Fireball] No IProjectileReactive found — hits won't affect win/loss state.");
+            Debug.LogWarning("No IWinCondition found in the scene — hits won't affect win/loss state.");
         }
+
     }
 
     private void Update()
@@ -46,6 +45,7 @@ public class Fireball : MonoBehaviour
         direction = newDirection.normalized;
         hasDirection = true;
 
+        // Rotate visual to match movement direction
         if (visualChild != null)
         {
             float angle = Vector2.SignedAngle(Vector2.down, direction);
@@ -55,21 +55,23 @@ public class Fireball : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        Debug.Log($"[Fireball] Triggered by: {other.name}, tag: {other.tag}");
-
         if (audioSource != null && hitSound != null &&
             (other.CompareTag("Player") || other.CompareTag("Enemy")))
         {
             AudioSource.PlayClipAtPoint(hitSound, transform.position);
         }
 
-        if (projectileReactive != null &&
-            (other.CompareTag("Player") || other.CompareTag("Enemy")))
+        // Register hit with win condition if relevant
+        if (winCondition != null && other.CompareTag("Player"))
         {
-            Debug.Log("[Fireball] Calling OnProjectileHit...");
-            projectileReactive.OnProjectileHit(other.tag);
+            // Instead of knowing exact win condition type, we call a standard method
+            if (winCondition is IProjectileReactive projectileReactive)
+            {
+                projectileReactive.OnProjectileHit(other.tag);
+            }
         }
 
+        // Destroy projectile on impact
         if (other.CompareTag("Player") || other.CompareTag("Enemy") || other.CompareTag("Wall"))
         {
             Destroy(gameObject);
