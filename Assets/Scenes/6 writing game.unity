@@ -132,7 +132,6 @@ GameObject:
   m_Component:
   - component: {fileID: 109124756}
   - component: {fileID: 109124757}
-  - component: {fileID: 109124758}
   m_Layer: 0
   m_Name: WordChecker
   m_TagString: Untagged
@@ -175,8 +174,10 @@ MonoBehaviour:
   - expelliarmus
   - lumos
   - ' forcecage'
-  currentRound: 0
-  MaxRounds: 3
+  LostRounds: 0
+  WonRounds: 0
+  lostRoundToFailGame: 3
+  WonRoundToWinGame: 3
   TimeToAnswer: 10
   TextField: {fileID: 1138172863}
   SpellText: {fileID: 1558268221}
@@ -187,19 +188,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53dffc6d7a81052429e0655238486258, type: 2}
   - {fileID: 11400000, guid: 63d2c48e98dd5c44ca1222b7f0ef5854, type: 2}
   - {fileID: 11400000, guid: 021616d250c70744f990f6f8927fa701, type: 2}
---- !u!114 &109124758
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 109124754}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af9e17c132e19d744a112ade539cccd6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Timer2: 0
 --- !u!1 &292954630
 GameObject:
   m_ObjectHideFlags: 0
