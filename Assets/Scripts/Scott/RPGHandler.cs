@@ -28,6 +28,9 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     public AudioClip hurt;
     public AudioClip run;
 
+    private int playerHP;
+    private const int maxHP = 50;
+
     void Start()
     {
         int randomIndex = UnityEngine.Random.Range(0, Situation.Length);
@@ -78,8 +81,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         {
             Pressed = true;
             BattleText.text = "You healed all your HP.";
-            HPText.text = "HP: 20";
-            HPText.color = Color.white;
+            playerHP = maxHP;
+            UpdateHPDisplay();
             audioSource.PlayOneShot(heal);
 
             if (chosenSituation == "Heal") StartCoroutine(HealCorrect());
@@ -98,9 +101,36 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         }
     }
 
-    void Fight() { HPText.text = "HP: 20"; GoblinText.color = Color.red; }
-    void Heal() { HPText.text = "HP: 5"; HPText.color = Color.yellow; GoblinText.color = Color.yellow; }
-    void Run() { HPText.text = "HP: 1"; HPText.color = Color.red; }
+    void Fight()
+    {
+        playerHP = maxHP;
+        UpdateHPDisplay();
+        GoblinText.color = Color.red;
+    }
+
+    void Heal()
+    {
+        playerHP = 25;
+        UpdateHPDisplay();
+        GoblinText.color = Color.yellow;
+    }
+
+    void Run()
+    {
+        playerHP = 10;
+        UpdateHPDisplay();
+    }
+
+    void UpdateHPDisplay()
+    {
+        HPText.text = $"HP: {playerHP}";
+        if (playerHP > 30)
+            HPText.color = Color.white;
+        else if (playerHP > 10)
+            HPText.color = Color.yellow;
+        else
+            HPText.color = Color.red;
+    }
 
     IEnumerator FightCorrect()
     {
@@ -119,8 +149,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "You Missed!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "You lost all your HP due to poison.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -136,8 +166,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin Attacks!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "You lost all your HP.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -162,8 +192,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin Attacks!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "You lost all your HP.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -176,8 +206,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin Attacks!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "You lost all your HP.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -202,8 +232,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "You tripped!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "The Goblin caught you.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -216,8 +246,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "You slipped!";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "The Goblin caught you.";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);
@@ -229,8 +259,8 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     {
         BattleText.text = "You hesitated...";
         yield return new WaitForSeconds(2f);
-        HPText.text = "HP: 0";
-        HPText.color = Color.red;
+        playerHP = 0;
+        UpdateHPDisplay();
         BattleText.text = "The Goblin strikes!";
         audioSource.PlayOneShot(hurt);
         yield return new WaitForSeconds(2f);

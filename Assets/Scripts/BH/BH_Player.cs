@@ -1,65 +1,59 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BH_Player : MonoBehaviour
 {
+    public float moveSpeed = 5f;
+    public int health = 3;
 
-    Animator animator;
-    Rigidbody2D RB;
-    Vector3 MousePos;
-    [Tooltip("adds deadzone to stop RB.AddForce from teaking")] 
-    public float ThresholdRange = 0.5f;
-    public float Speed = 15f;
-    public bool IsDead;
+    private Rigidbody2D rb;
+    private Vector2 moveInput;
+    private BH_WinCondition winCondition;
 
-
-
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        animator = GetComponent<Animator>();
-        RB = GetComponent<Rigidbody2D>();
-        GameEvents.current.OnPlayerHit += PlayerHit;
+        rb = GetComponent<Rigidbody2D>();
+        winCondition = FindObjectOfType<BH_WinCondition>();
+
+        if (rb == null)
+            Debug.LogError("[BH] No Rigidbody2D found on Player!");
+        if (winCondition == null)
+            Debug.LogError("[BH] No BH_WinCondition found!");
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        if (!IsDead)
+        float moveX = Input.GetAxisRaw("Horizontal");
+        float moveY = Input.GetAxisRaw("Vertical");
+        moveInput = new Vector2(moveX, moveY).normalized;
+    }
+
+    private void FixedUpdate()
+    {
+        if (rb != null)
+            rb.velocity = moveInput * moveSpeed;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("EnemyBullet"))
         {
-            MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            health--;
+            Debug.Log($"[BH_Player] Hit by bullet. Health now: {health}");
 
-            animator.SetFloat("Movement", RB.velocity.x);
-
-            if (transform.position.x < MousePos.x + ThresholdRange)
+            if (winCondition != null)
             {
-                RB.AddForce(new Vector2(Speed, 0));
+                Debug.Log("[BH_Player] Notifying WinCondition of hit.");
+                winCondition.PlayerHit();
             }
 
-
-            if (transform.position.x > MousePos.x + -ThresholdRange)
+            if (health <= 0 && winCondition != null)
             {
-                RB.AddForce(new Vector2(-Speed, 0));
+                Debug.Log("[BH_Player] Health <= 0. Triggering lose condition.");
+                winCondition.TriggerLose();
+                Destroy(gameObject);
             }
 
+            Destroy(collision.gameObject);
         }
-        
-    }
-
-    public void PlayerHit()
-    {
-        IsDead = true;
-
-        RB.constraints = RigidbodyConstraints2D.None;
-        RB.drag = 1;
-        RB.AddForce(new Vector2(0, 1000));
-
-        
-        Debug.Log("player dead");
-
-
     }
 }

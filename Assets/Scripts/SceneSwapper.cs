@@ -198,4 +198,25 @@ public class SceneSwapper : MonoBehaviour
         }
         return activeScenes;
     }
+    // Called by the "Play Again" button
+    public void RestartCurrentScene()
+    {
+        if (!string.IsNullOrEmpty(CurrentScene))
+        {
+            Debug.Log($"SceneSwapper: Restarting scene '{CurrentScene}'");
+            LoadUnloadScene(CurrentScene); // Re-load the same scene
+        }
+        else
+        {
+            Debug.LogWarning("SceneSwapper: No current scene to restart.");
+        }
+    }
+
+    // Called by the "Exit" button
+    public void ExitToDesktop()
+    {
+        Debug.Log("SceneSwapper: Exiting game via Victory Panel.");
+        ExitGame();
+    }
+
 }
