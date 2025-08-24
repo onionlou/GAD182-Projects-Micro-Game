@@ -17,6 +17,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     private string chosenSituation;
     private bool Pressed;
     private bool OutofTime;
+    private bool Intro;
     private bool winOrLoseTriggered;
 
     public float decisionTime;
@@ -29,7 +30,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     public AudioClip run;
 
     private int playerHP;
-    private const int maxHP = 50;
+    private const int maxHP = 20;
 
     void Start()
     {
@@ -37,13 +38,18 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         chosenSituation = Situation[randomIndex];
         Debug.Log("[RPG] Situation: " + chosenSituation);
 
-        decisionTime = 5.0f;
+        decisionTime = 11.0f;
         audioSource.PlayOneShot(music);
         Pressed = false;
         OutofTime = false;
         winOrLoseTriggered = false;
 
-        BattleText.text = "A goblin blocks your path. What do you do?\nLeft Arrow Key - Fight                         Right Arrow Key - Heal\n                             Down Arrow Key - Run";
+        if (chosenSituation == "Fight") StartCoroutine(IntroFight());
+        else if (chosenSituation == "Heal") StartCoroutine(IntroHeal());
+        else StartCoroutine(IntroRun());
+
+
+        BattleText.text = "A goblin blocks your path.";
 
         switch (chosenSituation)
         {
@@ -60,14 +66,14 @@ public class RPGHandler : MonoBehaviour, IWinCondition
 
         decisionTime -= Time.deltaTime;
 
-        if (decisionTime <= 0f && !Pressed && !OutofTime)
+        if (decisionTime <= 0f && !Intro && !Pressed && !OutofTime)
         {
             Debug.Log("[RPG] TIME UP");
             OutofTime = true;
             StartCoroutine(TimeUp());
         }
 
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && !Pressed && decisionTime > 0f)
+        if (Input.GetKeyDown(KeyCode.LeftArrow) && !Intro && !Pressed && decisionTime > 0f)
         {
             Pressed = true;
             BattleText.text = "You Attack the Goblin.";
@@ -77,7 +83,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
             else StartCoroutine(FightWrongR());
         }
 
-        if (Input.GetKeyDown(KeyCode.RightArrow) && !Pressed && decisionTime > 0f)
+        if (Input.GetKeyDown(KeyCode.RightArrow) && !Intro && !Pressed && decisionTime > 0f)
         {
             Pressed = true;
             BattleText.text = "You healed all your HP.";
@@ -90,7 +96,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
             else StartCoroutine(HealWrongR());
         }
 
-        if (Input.GetKeyDown(KeyCode.DownArrow) && !Pressed && decisionTime > 0f)
+        if (Input.GetKeyDown(KeyCode.DownArrow) && !Intro && !Pressed && decisionTime > 0f)
         {
             Pressed = true;
             BattleText.text = "You tried to run away.";
@@ -110,26 +116,53 @@ public class RPGHandler : MonoBehaviour, IWinCondition
 
     void Heal()
     {
-        playerHP = 25;
+        playerHP = 5;
         UpdateHPDisplay();
         GoblinText.color = Color.yellow;
     }
 
     void Run()
     {
-        playerHP = 10;
+        playerHP = 1;
         UpdateHPDisplay();
     }
 
     void UpdateHPDisplay()
     {
         HPText.text = $"HP: {playerHP}";
-        if (playerHP > 30)
+        if (playerHP > 9)
             HPText.color = Color.white;
-        else if (playerHP > 10)
+        else if (playerHP > 4)
             HPText.color = Color.yellow;
         else
             HPText.color = Color.red;
+    }
+
+    IEnumerator IntroFight()
+    {
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "The Goblin is low on HP.";
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "What do you do?\nLeft Arrow Key - Fight      Right Arrow Key - Heal    Down Arrow Key - Run";
+        Intro = false;
+    }
+
+    IEnumerator IntroHeal()
+    {
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "Both you and the Goblin are poisoned.";
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "What do you do?\nLeft Arrow Key - Fight      Right Arrow Key - Heal    Down Arrow Key - Run";
+        Intro = false;
+    }
+
+    IEnumerator IntroRun()
+    {
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "Your low on HP and the Goblin is preparing it's super attack.";
+        yield return new WaitForSeconds(3f);
+        BattleText.text = "What do you do?\nLeft Arrow Key - Fight      Right Arrow Key - Heal    Down Arrow Key - Run";
+        Intro = false;
     }
 
     IEnumerator FightCorrect() // Lucas: added null checks here for 
@@ -209,7 +242,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     IEnumerator HealWrongF()
     {
         yield return new WaitForSeconds(2f);
-        BattleText.text = "The Goblin Attacks!";
+        BattleText.text = "The Goblin does a Super Attack!";
         yield return new WaitForSeconds(2f);
         playerHP = 0;
         UpdateHPDisplay();
@@ -223,7 +256,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     IEnumerator HealWrongR()
     {
         yield return new WaitForSeconds(2f);
-        BattleText.text = "The Goblin Attacks!";
+        BattleText.text = "The Goblin does a Super Attack!";
         yield return new WaitForSeconds(2f);
         playerHP = 0;
         UpdateHPDisplay();
