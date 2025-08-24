@@ -6665,7 +6665,7 @@ PrefabInstance:
       objectReference: {fileID: 2019552316}
     - target: {fileID: 6585258597863433032, guid: 546068d91e24eeb4eb2dd61945b8e59a, type: 3}
       propertyPath: timeRemaining
-      value: 30
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 8057769507366189130, guid: 546068d91e24eeb4eb2dd61945b8e59a, type: 3}
       propertyPath: m_AnchoredPosition.x
