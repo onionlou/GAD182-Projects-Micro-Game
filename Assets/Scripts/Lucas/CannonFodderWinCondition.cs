@@ -1,12 +1,9 @@
 ﻿using UnityEngine;
-using System;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
-public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectileReactive
+public class CannonFodderWinCondition : MonoBehaviour, IProjectileReactive
 {
-    public event Action OnWin;
-    public event Action OnLose;
-
     [SerializeField] private float timeLimit = 5f;
     [SerializeField] private string sceneTag = "CannonFodder";
 
@@ -17,8 +14,7 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
 
     private IEnumerator Start()
     {
-        Debug.Log($"[{sceneTag}] WinCondition initializing...");
-
+        Debug.Log($"[{sceneTag}] Initializing win condition...");
         goblinHit = false;
         winTriggered = false;
         sceneReady = false;
@@ -35,41 +31,30 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
         if (!sceneReady || goblinHit || winTriggered) return;
 
         timer -= Time.deltaTime;
-        if (timer <= 0f && CheckLoseCondition())
+        if (timer <= 0f)
         {
-            Debug.Log($"[{sceneTag}] ✔ Lose condition met.");
+            Debug.Log($"[{sceneTag}] ⏱ Time expired. No goblin hit.");
             winTriggered = true;
-            OnLose?.Invoke();
+            HandleLose();
         }
     }
 
     public void OnProjectileHit(string hitTag)
     {
-        Debug.Log($"[{sceneTag}] OnProjectileHit called with tag: {hitTag}");
+        Debug.Log($"[{sceneTag}] Projectile hit detected: {hitTag}");
 
-        if (!sceneReady)
+        if (!sceneReady || winTriggered)
         {
-            Debug.LogWarning($"[{sceneTag}] Hit ignored — scene not ready.");
-            return;
-        }
-
-        if (winTriggered)
-        {
-            Debug.LogWarning($"[{sceneTag}] Hit ignored — win already triggered.");
+            Debug.LogWarning($"[{sceneTag}] Hit ignored — scene not ready or win already triggered.");
             return;
         }
 
         if (hitTag == "Enemy")
         {
-            Debug.Log($"[{sceneTag}] Valid hit registered.");
+            Debug.Log($"[{sceneTag}] ✔ Goblin hit confirmed.");
             goblinHit = true;
-
-            if (CheckWinCondition())
-            {
-                Debug.Log($"[{sceneTag}] ✔ Win condition met.");
-                winTriggered = true;
-                OnWin?.Invoke();
-            }
+            winTriggered = true;
+            HandleWin();
         }
         else
         {
@@ -77,7 +62,16 @@ public class CannonFodderWinCondition : MonoBehaviour, IWinCondition, IProjectil
         }
     }
 
-    public bool CheckWinCondition() => goblinHit;
+    private void HandleWin()
+    {
+        Debug.Log($"[{sceneTag}] 🎉 Win condition met. Loading FINAL Win Menu...");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene("FINAL Win Menu", LoadSceneMode.Single);
+    }
 
-    public bool CheckLoseCondition() => !goblinHit && timer <= 0f;
+    private void HandleLose()
+    {
+        Debug.Log($"[{sceneTag}] ❌ Lose condition met. No scene transition triggered.");
+        // Optional: Load a lose scene or show UI here if needed
+    }
 }
