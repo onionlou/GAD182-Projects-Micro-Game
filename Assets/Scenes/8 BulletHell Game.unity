@@ -255,7 +255,7 @@ MonoBehaviour:
     m_RotationOrder: 4
   ItemsToSpawn:
   - {fileID: 2163983185269123802, guid: 8e79b618ad0a57f488908cfb0a88667f, type: 3}
-  survivalTime: 15
+  survivalTime: 25
 --- !u!4 &600420667
 Transform:
   m_ObjectHideFlags: 0
@@ -872,7 +872,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 823ca99a6ccd6544896906283ba32642, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  survivalTime: 20
+  survivalTime: 25
 --- !u!4 &1523832705
 Transform:
   m_ObjectHideFlags: 0

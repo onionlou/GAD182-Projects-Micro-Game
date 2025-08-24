@@ -70,7 +70,7 @@ public class BH_Spawn : MonoBehaviour, IWinCondition
     public void Spawner()
     {
         int RandomItemFromList = Random.Range(0, ItemsToSpawn.Count);
-        float SpawnRange = Random.Range(-9.33f, 9.33f);
+        float SpawnRange = Random.Range(-8f, 8f);
         Vector3 Location = new Vector3(SpawnRange, 5.67f, 0);
         Instantiate(ItemsToSpawn[RandomItemFromList], Location, Quaternion.identity);
     }
@@ -90,6 +90,8 @@ public class BH_Spawn : MonoBehaviour, IWinCondition
     // Public method to trigger lose (called by BH_Player/BH_Item when player dies)
     public void TriggerLose()
     {
+        
+
         if (isGameOver) return;
         Debug.Log("BH_Spawn: Player hit, triggering OnLose.");
         isGameOver = true;
