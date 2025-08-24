@@ -141,7 +141,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     IEnumerator IntroFight()
     {
         yield return new WaitForSeconds(3f);
-        BattleText.text = "The Goblin is low on HP.";
+        BattleText.text = "The Goblin is low on HP. This is your chance!";
         yield return new WaitForSeconds(3f);
         BattleText.text = "What do you do?\nLeft Arrow Key - Fight      Right Arrow Key - Heal    Down Arrow Key - Run";
         Intro = false;
@@ -159,7 +159,7 @@ public class RPGHandler : MonoBehaviour, IWinCondition
     IEnumerator IntroRun()
     {
         yield return new WaitForSeconds(3f);
-        BattleText.text = "Your low on HP and the Goblin is preparing it's super attack.";
+        BattleText.text = "Your low on HP and the Goblin is preparing it's super attack. Healing might not do much.";
         yield return new WaitForSeconds(3f);
         BattleText.text = "What do you do?\nLeft Arrow Key - Fight      Right Arrow Key - Heal    Down Arrow Key - Run";
         Intro = false;
