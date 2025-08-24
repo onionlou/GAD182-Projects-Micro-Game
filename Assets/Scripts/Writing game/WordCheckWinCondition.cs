@@ -15,29 +15,24 @@ public class WordcheckWinCondition : MonoBehaviour, IWinCondition
 
         if (wordcheck == null)
         {
-            Debug.LogError("❌ No Wordcheck script found in scene!");
+            Debug.LogError("WordcheckWinCondition: No Wordcheck script found in scene!");
             return;
         }
 
-        // Hook into Wordcheck's end logic
-        StartCoroutine(GameEndWatcher());
-        Debug.Log("✔ WordcheckWinCondition initialized.");
+        Debug.Log("WordcheckWinCondition initialized.");
     }
 
-    private System.Collections.IEnumerator GameEndWatcher()
+    private void Update()
     {
-        // Poll for game end
-        while (!wordcheckIsGameOver())
-        {
-            yield return null;
-        }
+        if (wordcheck == null || outcomeTriggered) return;
 
-        if (!outcomeTriggered)
+        if (CheckWinCondition())
         {
-            if (wordcheck.WonRounds >= wordcheck.WonRoundToWinGame)
-                TriggerWin();
-            else if (wordcheck.LostRounds >= wordcheck.lostRoundToFailGame)
-                TriggerLose();
+            TriggerWin();
+        }
+        else if (CheckLoseCondition())
+        {
+            TriggerLose();
         }
     }
 
@@ -45,7 +40,8 @@ public class WordcheckWinCondition : MonoBehaviour, IWinCondition
     {
         if (outcomeTriggered) return;
         outcomeTriggered = true;
-        Debug.Log("✔ WordcheckWinCondition: Player won.");
+
+        Debug.Log("WordcheckWinCondition: Player won.");
         OnWin?.Invoke();
     }
 
@@ -53,18 +49,15 @@ public class WordcheckWinCondition : MonoBehaviour, IWinCondition
     {
         if (outcomeTriggered) return;
         outcomeTriggered = true;
-        Debug.Log("✖ WordcheckWinCondition: Player lost.");
+
+        Debug.Log("WordcheckWinCondition: Player lost.");
         OnLose?.Invoke();
     }
 
+    // IWinCondition implementation
     public bool CheckWinCondition() =>
-        wordcheck.WonRounds >= wordcheck.WonRoundToWinGame;
+        wordcheck != null && wordcheck.WonRounds >= wordcheck.WonRoundToWinGame;
 
     public bool CheckLoseCondition() =>
-        wordcheck.LostRounds >= wordcheck.lostRoundToFailGame;
-
-    private bool wordcheckIsGameOver()
-    {
-        return wordcheck == null || wordcheck.WonRounds >= wordcheck.WonRoundToWinGame || wordcheck.LostRounds >= wordcheck.lostRoundToFailGame;
-    }
+        wordcheck != null && wordcheck.LostRounds >= wordcheck.lostRoundToFailGame;
 }

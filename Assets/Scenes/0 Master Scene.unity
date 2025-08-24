@@ -232,7 +232,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6221019884555854710, guid: d7d31229a5def2b40ad2e7f3e5e670b3, type: 3}
       propertyPath: m_Name
-      value: VICTORY Panel
+      value: finalWinMenuUI
       objectReference: {fileID: 0}
     - target: {fileID: 6221019884555854710, guid: d7d31229a5def2b40ad2e7f3e5e670b3, type: 3}
       propertyPath: m_IsActive
@@ -959,14 +959,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   uiScenes: []
   gameScenes:
-  - 1 Dodge (Fire)ball
-  - 2 Cannon Fodder
-  - 3 Quick Magic
   - 4 RPG Select
-  - 5 FireFeast
-  - 6 PotionPanic
-  - 7 Writing Game
   - 8 BulletHell Game
+  - 7 Writing Game
+  - 6 PotionPanic
+  - 5 FireFeast
+  - 1 Dodge (Fire)ball
+  - 3 Quick Magic
+  - 2 Cannon Fodder
+  - FINAL Win Menu
 --- !u!4 &1585992313
 Transform:
   m_ObjectHideFlags: 0

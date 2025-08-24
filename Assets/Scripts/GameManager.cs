@@ -154,40 +154,44 @@ public class GameManager : MonoBehaviour
     private IEnumerator EnsureFinalWinUIThenTrigger()
     {
         Debug.Log("GameManager: Checking finalWinMenuUI before triggering final win...");
-        Debug.Log($"GameManager: finalWinMenuUI assigned = {finalWinMenuUI != null}");
-
-        if (finalWinMenuUI == null || !finalWinMenuUI.scene.isLoaded)
+        if (finalWinMenuUI == null)
         {
-            Debug.Log("GameManager: Waiting for finalWinMenuUI to load...");
-            yield return new WaitForSecondsRealtime(0.2f);
+            Debug.LogWarning("GameManager: finalWinMenuUI is null!");
+            yield break;
         }
+
+        // Wait until it's loaded and active
+        float timeout = 2f;
+        float elapsed = 0f;
+        while (!finalWinMenuUI.scene.isLoaded)
+        {
+            yield return new WaitForSecondsRealtime(0.1f);
+            elapsed += 0.1f;
+            if (elapsed >= timeout)
+            {
+                Debug.LogWarning("GameManager: Timeout waiting for finalWinMenuUI to load.");
+                break;
+            }
+        }
+
 
         HandleFinalWin();
     }
 
+
     public void HandleFinalWin()
     {
         Debug.Log("GameManager: Entered HandleFinalWin()");
-        Debug.Log($"GameManager: gameEnded = {gameEnded}");
-
         if (gameEnded) return;
         gameEnded = true;
 
-        AudioManager.instance.StopMusic();
+        AudioManager.instance?.StopMusic();
+        Time.timeScale = 1f; // Ensure time resumes before scene load
 
-        if (finalWinMenuUI != null)
-        {
-            finalWinMenuUI.SetActive(true);
-            Debug.Log("GameManager: Final win menu UI activated.");
-        }
-        else
-        {
-            Debug.LogWarning("GameManager: Final win menu UI is null!");
-        }
-
-        AudioManager.instance.PlayFinalWinSound();
-        Time.timeScale = 0f;
+        SceneManager.LoadScene("FINAL Win Menu", LoadSceneMode.Single);
     }
+
+
 
     // -----------------------------
     // UI Buttons

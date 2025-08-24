@@ -1,62 +1,99 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
 
-public class BH_Spawn : MonoBehaviour
+/// <summary>
+/// Bullet Hell spawner that now integrates with IWinCondition instead of GameEvents.
+/// The player wins if they survive for 'survivalTime' seconds.
+/// </summary>
+public class BH_Spawn : MonoBehaviour, IWinCondition
 {
-    [Header("Spawning Settings")]
-    public bool isSpawning = true;
-    public AnimationCurve spawnCurve = AnimationCurve.Linear(0, 1f, 10, 0.2f);
-    public List<GameObject> bulletPrefabs = new List<GameObject>();
+    public bool IsSpawning = true;
+    public AnimationCurve SpawnCurve;
+    public List<GameObject> ItemsToSpawn = new List<GameObject>();
 
-    [Header("Spawn Range")]
-    public float xMin = -9.33f;
-    public float xMax = 9.33f;
-    public float ySpawn = 5.67f;
+    [Header("Win Condition Settings")]
+    public float survivalTime = 10f; // <-- NEW: player must survive this long
+    private float elapsedTime = 0f;
+    private bool isGameOver = false;
 
-    private BH_WinCondition winCondition;
+    // IWinCondition events
+    public event System.Action OnWin;
+    public event System.Action OnLose;
+
+    // --------------------------
+    // OLD: Used GameEvents, now commented
+    // IEnumerator Start()
+    // {
+    //     GameEvents.current.OnPlayerHit += PlayerHit;
+    //     while (IsSpawning)
+    //     {
+    //         yield return new WaitForSeconds(SpawnCurve.Evaluate(Time.time));
+    //         Spawner();
+    //     }
+    //     yield return null;
+    // }
+    // --------------------------
 
     private void Start()
     {
-        winCondition = FindObjectOfType<BH_WinCondition>();
-        if (winCondition == null)
-        {
-            Debug.LogWarning("[BH_Spawn] No BH_WinCondition found. Spawning will not stop on lose.");
-        }
-
+        // Start coroutine manually instead of relying on GameEvents
         StartCoroutine(SpawnLoop());
+    }
+
+    private void Update()
+    {
+        if (isGameOver) return;
+
+        // Track survival time
+        elapsedTime += Time.deltaTime;
+
+        if (elapsedTime >= survivalTime)
+        {
+            Debug.Log("BH_Spawn: Survived! Triggering OnWin.");
+            isGameOver = true;
+            IsSpawning = false;
+
+            OnWin?.Invoke();
+        }
     }
 
     private IEnumerator SpawnLoop()
     {
-        while (isSpawning)
+        while (IsSpawning)
         {
-            if (winCondition != null && winCondition.CheckLoseCondition())
-            {
-                Debug.Log("[BH_Spawn] Player lost. Stopping spawn.");
-                isSpawning = false;
-                yield break;
-            }
-
-            float waitTime = spawnCurve.Evaluate(Time.time);
-            yield return new WaitForSeconds(waitTime);
-
-            SpawnBullet();
+            yield return new WaitForSeconds(SpawnCurve.Evaluate(Time.time));
+            Spawner();
         }
     }
 
-    private void SpawnBullet()
+    public void Spawner()
     {
-        if (bulletPrefabs.Count == 0)
-        {
-            Debug.LogWarning("[BH_Spawn] No bullet prefabs assigned.");
-            return;
-        }
+        int RandomItemFromList = Random.Range(0, ItemsToSpawn.Count);
+        float SpawnRange = Random.Range(-9.33f, 9.33f);
+        Vector3 Location = new Vector3(SpawnRange, 5.67f, 0);
+        Instantiate(ItemsToSpawn[RandomItemFromList], Location, Quaternion.identity);
+    }
 
-        int index = Random.Range(0, bulletPrefabs.Count);
-        float xPos = Random.Range(xMin, xMax);
-        Vector3 spawnPos = new Vector3(xPos, ySpawn, 0f);
+    // --------------------------
+    // OLD: Called via GameEvents when player was hit
+    // public void PlayerHit()
+    // {
+    //     IsSpawning = false;
+    // }
+    // --------------------------
 
-        Instantiate(bulletPrefabs[index], spawnPos, Quaternion.identity);
+    // IWinCondition implementation
+    public bool CheckWinCondition() => elapsedTime >= survivalTime && !isGameOver;
+    public bool CheckLoseCondition() => isGameOver && !CheckWinCondition();
+
+    // Public method to trigger lose (called by BH_Player/BH_Item when player dies)
+    public void TriggerLose()
+    {
+        if (isGameOver) return;
+        Debug.Log("BH_Spawn: Player hit, triggering OnLose.");
+        isGameOver = true;
+        IsSpawning = false;
+        OnLose?.Invoke();
     }
 }

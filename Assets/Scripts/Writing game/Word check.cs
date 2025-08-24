@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 
-public class Wordcheck : MonoBehaviour
+/// <summary>
+/// Word typing game adjusted to use IWinCondition.
+/// </summary>
+public class Wordcheck : MonoBehaviour, IWinCondition
 {
-
-
     public List<string> words = new List<string>();
     int intWord;
     string activeWord;
@@ -22,35 +22,33 @@ public class Wordcheck : MonoBehaviour
 
     public GameObject TextField;
     public TMP_Text SpellText;
-
     private Coroutine activeCoroutine;
 
     public Animator HeroAni;
     public Animator EnemyAni;
+    public List<TMP_FontAsset> FontList = new List<TMP_FontAsset>();
 
+    // IWinCondition events
+    public event System.Action OnWin;
+    public event System.Action OnLose;
 
-    public List<TMPro.TMP_FontAsset> FontList = new List<TMPro.TMP_FontAsset>();
+    // --------------------------
+    // OLD: Ended game locally with GameEnd coroutine
+    // IEnumerator GameEnd(bool score)
+    // {
+    //     IsGameOver = true;
+    //     TextField.SetActive(false);
+    //     yield return new WaitForSeconds(3);
+    // }
+    // --------------------------
 
-
-    //culls old coroutine, so they dont overlap into next round
-    public void StartNewCoroutine(IEnumerator routine)
-    {
-        if (activeCoroutine != null)
-        {
-            StopCoroutine(activeCoroutine);
-        }
-
-        activeCoroutine = StartCoroutine(routine);
-    }
-
-
-
-
+    // Start game
     void Start()
     {
         RoundStart();
     }
 
+    // Start round
     void RoundStart()
     {
         EnemyAni.SetFloat("Stage Float", LostRounds);
@@ -65,44 +63,33 @@ public class Wordcheck : MonoBehaviour
 
         int ActiveFont = Random.Range(0, FontList.Count);
         SpellText.font = FontList[ActiveFont];
-
-
     }
 
-
-
-
+    // Check typed word
     public void CheckWord(string TypedWord)
     {
+        if (IsGameOver) return;
+
         if (TypedWord == activeWord)
         {
             if (WonRounds == WonRoundToWinGame)
             {
-                //win end game
-
-                //enemy dies
-                Debug.Log("won Game");
-                StartNewCoroutine(GameEnd(true));
-
+                Debug.Log("Wordcheck: Won Game!");
+                IsGameOver = true;
+                OnWin?.Invoke(); // <-- NEW: trigger GameManager
                 return;
             }
 
-
-            //win round
-
-
             WonRounds++;
             StartNewCoroutine(WaitForAnimation());
-            Debug.Log("won round");
-
-
+            Debug.Log("Wordcheck: Won round");
         }
         else
         {
             Lost();
         }
-
     }
+
     IEnumerator WaitForAnimation()
     {
         SpellText.rectTransform.anchoredPosition = new Vector3(353, -403, 0);
@@ -111,32 +98,24 @@ public class Wordcheck : MonoBehaviour
         HeroAni.SetBool("Is Attacking", false);
 
         RoundStart();
-        yield return null;
     }
 
     public void Lost()
     {
+        if (IsGameOver) return;
+
         if (LostRounds >= lostRoundToFailGame)
         {
-            //lose end game
-            //you die
-            Debug.Log("lost Game");
-
-            StartNewCoroutine(GameEnd(false));
+            Debug.Log("Wordcheck: Lost Game!");
+            IsGameOver = true;
+            OnLose?.Invoke(); // <-- NEW: trigger GameManager
             return;
         }
 
-        //lose round
-
-        //shoot dud at enemy
-
         LostRounds++;
         RoundStart();
-        Debug.Log("lost round");
-
-
+        Debug.Log("Wordcheck: Lost round");
     }
-
 
     IEnumerator Stopwatch()
     {
@@ -146,28 +125,18 @@ public class Wordcheck : MonoBehaviour
         {
             Lost();
         }
-
-
-        yield return null;
     }
 
-    IEnumerator GameEnd(bool score)
+    // Utility: start coroutines safely
+    public void StartNewCoroutine(IEnumerator routine)
     {
-        IsGameOver = true;
-        TextField.SetActive(false);
+        if (activeCoroutine != null)
+            StopCoroutine(activeCoroutine);
 
-        yield return new WaitForSeconds(3);
-
-        //if score is true = won
-        //if score is flase = lost
-
-        yield return null;
+        activeCoroutine = StartCoroutine(routine);
     }
 
-
-    //to add
-    //  death animation
-    //  count down on UI 
-
-
+    // IWinCondition implementation
+    public bool CheckWinCondition() => WonRounds >= WonRoundToWinGame && IsGameOver;
+    public bool CheckLoseCondition() => LostRounds >= lostRoundToFailGame && IsGameOver;
 }

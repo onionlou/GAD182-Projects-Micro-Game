@@ -1,58 +1,56 @@
 ﻿using UnityEngine;
-using System;
 
 public class BH_WinCondition : MonoBehaviour, IWinCondition
 {
-    public event Action OnWin;
-    public event Action OnLose;
+    [SerializeField] private float survivalTime = 10f; // win after 10s
+    private float timer = 0f;
 
-    [SerializeField] private int hitsToWin = 10;
+    private bool playerDead = false;
+    private bool outcomeTriggered = false;
 
-    private int hitsTaken = 0;
-    private bool gameEnded = false;
+    public event System.Action OnWin;
+    public event System.Action OnLose;
 
-    public void PlayerHit()
+    private void Start()
     {
-        if (gameEnded)
-        {
-            return;
-        }
+        var player = GameObject.Find("Player").GetComponent<BH_Player>();
+        player.OnPlayerHit += HandlePlayerHit;
+    }
 
-        hitsTaken++;
-        Debug.Log($"[BH_WinCondition] Player hit registered. Total hits: {hitsTaken}");
+    private void Update()
+    {
+        if (outcomeTriggered || playerDead) return;
 
-        if (hitsTaken >= hitsToWin)
+        timer += Time.deltaTime;
+
+        if (timer >= survivalTime)
         {
-            Debug.Log("[BH_WinCondition] Hit threshold reached. Triggering win.");
             TriggerWin();
         }
     }
 
-    public void TriggerWin()
+    private void HandlePlayerHit()
     {
-        if (gameEnded)
-        {
-            return;
-        }
+        playerDead = true;
+        TriggerLose();
+    }
 
-        gameEnded = true;
-        Debug.Log("[BH_WinCondition] WIN triggered. Firing OnWin event.");
+    private void TriggerWin()
+    {
+        if (outcomeTriggered) return;
+        outcomeTriggered = true;
+        Debug.Log("BH_WinCondition: ✔ Player survived!");
         OnWin?.Invoke();
     }
 
-    public void TriggerLose()
+    private void TriggerLose()
     {
-        if (gameEnded)
-        {
-            return;
-        }
-
-        gameEnded = true;
-        Debug.Log("[BH_WinCondition] LOSE triggered. Firing OnLose event.");
+        if (outcomeTriggered) return;
+        outcomeTriggered = true;
+        Debug.Log("BH_WinCondition: ✖ Player died!");
         OnLose?.Invoke();
     }
 
-
-    public bool CheckWinCondition() => !gameEnded && hitsTaken >= hitsToWin;
-    public bool CheckLoseCondition() => gameEnded;
+    public bool CheckWinCondition() => timer >= survivalTime && !playerDead;
+    public bool CheckLoseCondition() => playerDead;
 }

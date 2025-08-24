@@ -1,17 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BH_Item : MonoBehaviour
 {
-    public int healAmount = 1;
+    private BoxCollider2D PlayerCollider;
+    private BoxCollider2D DeletePlane;
+    private BH_Player player;
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void Start()
     {
-        BH_Player player = collision.GetComponent<BH_Player>();
-        if (player != null)
+        player = GameObject.Find("Player").GetComponent<BH_Player>();
+        PlayerCollider = player.GetComponent<BoxCollider2D>(); // added this to subscribe to the BH_Player script (communicates through the win/lose interface)
+        DeletePlane = GameObject.Find("Delete plane").GetComponent<BoxCollider2D>();
+    }
+
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider == PlayerCollider)
         {
-            player.health += healAmount;
-            Debug.Log("[BH] Player healed! Health: " + player.health);
+            player.PlayerHit();
+            //GameEvents.current.PlayerHit(); <------ REMOVED as conflicts with Master Scene game event system
+
+        }
+        if (collision.collider == DeletePlane)
+        {
             Destroy(gameObject);
         }
+        
     }
 }

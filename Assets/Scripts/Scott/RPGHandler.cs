@@ -132,17 +132,27 @@ public class RPGHandler : MonoBehaviour, IWinCondition
             HPText.color = Color.red;
     }
 
-    IEnumerator FightCorrect()
+    IEnumerator FightCorrect() // Lucas: added null checks here for 
     {
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin was defeated.";
         audioSource.PlayOneShot(hit);
-        S_Goblin_256x256.SetActive(false);
-        GoblinText.gameObject.SetActive(false);
+
+        if (S_Goblin_256x256 != null)
+            S_Goblin_256x256.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] Goblin sprite is missing!");
+
+        if (GoblinText != null)
+            GoblinText.gameObject.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] GoblinText is missing!");
+
         yield return new WaitForSeconds(2f);
         BattleText.text = "You Won!!!";
         TriggerWin();
     }
+
 
     IEnumerator FightWrongH()
     {
@@ -180,8 +190,17 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "The Goblin died due to poison.";
         audioSource.PlayOneShot(hit);
-        S_Goblin_256x256.SetActive(false);
-        GoblinText.gameObject.SetActive(false);
+
+        if (S_Goblin_256x256 != null)
+            S_Goblin_256x256.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] Goblin sprite is missing!");
+
+        if (GoblinText != null)
+            GoblinText.gameObject.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] GoblinText is missing!");
+
         yield return new WaitForSeconds(2f);
         BattleText.text = "You Won!!!";
         TriggerWin();
@@ -220,12 +239,22 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         yield return new WaitForSeconds(2f);
         BattleText.text = "You escaped safely!";
         audioSource.PlayOneShot(run);
-        S_Goblin_256x256.SetActive(false);
-        GoblinText.gameObject.SetActive(false);
+
+        if (S_Goblin_256x256 != null)
+            S_Goblin_256x256.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] Goblin sprite is missing!");
+
+        if (GoblinText != null)
+            GoblinText.gameObject.SetActive(false);
+        else
+            Debug.LogWarning("[RPG] GoblinText is missing!");
+
         yield return new WaitForSeconds(2f);
         BattleText.text = "You Won!!!";
         TriggerWin();
     }
+
 
     IEnumerator RunWrongF()
     {
@@ -268,12 +297,24 @@ public class RPGHandler : MonoBehaviour, IWinCondition
         TriggerLose();
     }
 
-    void TriggerWin()
+    void TriggerWin() // Lucas: added debug logs to check if win is triggered correctly
     {
         if (winOrLoseTriggered) return;
         winOrLoseTriggered = true;
-        OnWin?.Invoke();
+
+        Debug.Log("[RPG] TriggerWin() called");
+
+        if (OnWin != null)
+        {
+            Debug.Log("[RPG] OnWin event is firing");
+            OnWin.Invoke();
+        }
+        else
+        {
+            Debug.LogWarning("[RPG] OnWin has no subscribers");
+        }
     }
+
 
     void TriggerLose()
     {
